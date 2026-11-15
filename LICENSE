@@ -1,0 +1,27 @@
+Spine Binary Use License
+
+Copyright (c) 2026 the Spine contributors. All rights reserved.
+
+Permission is granted, free of charge, to download, install, copy for backup,
+and run official Spine binaries and their accompanying installer, runtime
+helpers, and documentation for personal use or internal business use. You may
+adapt the accompanying setup scripts for your own installation. Keep this
+license and all third-party notices with your copies.
+
+Spine is proprietary software. Except for the permissions above, rights to
+Spine source code, redistribution, sublicensing, and derivative products are
+reserved. Additional permissions require written agreement from the relevant
+copyright holders. Nothing here limits rights that applicable law or GitHub's
+terms independently grant you.
+
+Third-party components are governed by their own licenses, supplied in the
+package's THIRD_PARTY_NOTICES directory or within the worker image. This
+license does not replace or restrict those rights. Your projects, inputs, and
+outputs do not become subject to this license merely by using Spine.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. TO THE EXTENT PERMITTED BY
+APPLICABLE LAW, THE COPYRIGHT HOLDERS SHALL NOT BE LIABLE FOR ANY CLAIM,
+DAMAGES, OR OTHER LIABILITY ARISING FROM OR IN CONNECTION WITH THE SOFTWARE
+OR ITS USE.
