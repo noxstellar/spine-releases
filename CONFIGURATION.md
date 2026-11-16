@@ -305,7 +305,7 @@ Published studies qualify exact configurations, not every policy combination.
 | --- | --- | --- |
 | `SPINE_AUTO_WORKFLOW` | `agent` | AUTO policy. Other values: `adaptive`, `producer_handoff`, `implementation_review_handoff`, `test_first_handoff`, `staged_handoff`, `implementation_test_handoff`, `obligation_test_handoff`, `evidenced_test_handoff`, `direct_test_handoff`. Other modes keep their own policy. |
 | `SPINE_VERIFICATION_POLICY` | Unset | JSON `{ "id": "…", "checks": [{"name":"…","arguments":{}}], "effect_tools": ["…"] }`. Exact caller-owned ToolCalls define observed checks; no semantic correctness oracle. Native tools required. |
-| `SPINE_RETURN_VERIFICATION` | `off` | **0.3 development, experimental:** `consumer` holds each nonroot completion for parent assessment. Acceptance can include one ordinary next action in the same request; repair reuses the child and spent counters. Shares ordinary model/request limits. Model review is fallible and does not establish whole-goal acceptance. Unsupported model profiles and mode changes on resume reject before dispatch. |
+| `SPINE_RETURN_VERIFICATION` | `off` | **0.3 development, experimental:** `consumer` holds each nonroot completion for parent assessment. Acceptance can include one ordinary next action; repair reuses the child and spent counters; `ask` retains a candidate-bound question without polling. Shares ordinary model/request limits. Model review is fallible and does not establish whole-goal acceptance. Unsupported model profiles and mode changes on resume reject before dispatch. |
 | `SPINE_PUBLIC_CHECK_SET` | Unset | JSON with optional `preparation` ToolCalls and `author_preparation` check indices; check calls come from the verification policy. Exposes the configured aggregate action. |
 | `SPINE_CALLER_RESERVE` | Applicable default: tools `min(max_tools/3,8)`, decisions `min(max_steps/4,6)` | JSON with exactly integer `tools` and `decisions`; supported by AUTO adaptive/producer/implementation-review policies. Explicit reserve must leave producer capacity and fund checks plus delivery. |
 | `SPINE_DIRECT_CALLER_TOOL_RESERVE` | `min(max_tools/3,8)` | Positive explicit tool reserve only for `direct_test_handoff` with a native public check set; must fit its configured checks and leave producer capacity. |
@@ -328,8 +328,17 @@ policies; historical staged policies and the native public-record envelope are
 not supported. When public work records are enabled, use their `assistant_text`
 transport. Native Chat Completions, structured decisions and Responses retain
 their existing provider requirements. This first consumer mode does not add an
-independent root reviewer. The [adaptive default (private source)](https://github.com/noxstellar/spine/blob/8d2c9dfdb69e47c0428765b2fd00cf6d1bdf0af5/rust/VERIFICATION_DESIGN.md) still
+independent root reviewer. The [adaptive default (private source)](https://github.com/noxstellar/spine/blob/9fd6ead1d43e4dde18927fc4592eccf3eda6e1c7/rust/VERIFICATION_DESIGN.md) still
 requires efficacy, overhead and durable-state qualification.
+
+The current `consumer_v2` profile adds bounded questions (at most 8,192 UTF-8
+bytes). The runtime exposes a typed suspension and saves the unresolved child;
+repeated suspended steps consume no model, context or tool calls and no active
+execution time. An accepted answer is trusted steering, not permission to accept
+the old result. This does not yet provide durable-goal question handling for
+consumer mode. See the [scoped continuation checks (private source)](https://github.com/noxstellar/spine/blob/9fd6ead1d43e4dde18927fc4592eccf3eda6e1c7/rust/proofs/2026-11-16-consumer-continuation/README.md).
+Earlier `consumer_v1` checkpoints retain their original executable/profile;
+changing the interface does not authorize resetting their accounting.
 
 ```sh
 # Unreleased experimental consumer assessment, using your configured provider.

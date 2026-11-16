@@ -74,7 +74,7 @@ separately. Timing is measured at step boundaries, not inferred as individual
 model/tool latency. Missing provider token usage is not zero cost.
 
 With experimental consumer assessment enabled, the graph distinguishes
-`awaiting review`, `repair requested`, `steering invalidated review` and
+`awaiting review`, `awaiting input`, `repair requested`, `steering invalidated review` and
 `reviewed input`. These labels come from typed runtime transitions, not text
 parsed from a model's answer. `reviewed input` means the parent accepted that
 candidate for its own work; it is not independent task acceptance. Candidate IDs
@@ -113,6 +113,6 @@ detect arbitrary secrets embedded in prose or source**. Treat detailed traces
 like task data. The recorder never reads raw provider bodies, headers or private
 reasoning. No tracing mode exposes these files as model tools.
 
-See [the local verification record (private source)](https://github.com/noxstellar/spine/blob/8d2c9dfdb69e47c0428765b2fd00cf6d1bdf0af5/rust/proofs/2026-11-16-execution-tracing/README.md)
+See [the local verification record (private source)](https://github.com/noxstellar/spine/blob/9fd6ead1d43e4dde18927fc4592eccf3eda6e1c7/rust/proofs/2026-11-16-execution-tracing/README.md)
 for checks and scope. These diagnostics help investigate behavior; they do not
 by themselves establish improved model quality or peer parity.

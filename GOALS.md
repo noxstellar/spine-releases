@@ -3,7 +3,7 @@
 > **Version scope:** This public copy preserves the guide’s release and development labels. Features marked unreleased are not available in an older installed binary. Private-source links require repository access.
 
 This interface is under qualification. Public v0.2.1 does not include it.
-See [the release plan (private source)](https://github.com/noxstellar/spine/blob/8d2c9dfdb69e47c0428765b2fd00cf6d1bdf0af5/rust/NEXT_RELEASE_PLAN.md) for remaining gates and the
+See [the release plan (private source)](https://github.com/noxstellar/spine/blob/9fd6ead1d43e4dde18927fc4592eccf3eda6e1c7/rust/NEXT_RELEASE_PLAN.md) for remaining gates and the
 [configuration reference](CONFIGURATION.md) for all defaults and examples.
 
 A goal records its objective and acceptance requirements **before any model
@@ -321,7 +321,7 @@ and `spine trace REPORT.trace.jsonl --html review.html`. Each period gets its ow
 trace. Details and coverage limits are in [tracing](TRACING.md). Scripted lifecycle
 controls do not prove week-scale model competence or superiority over other agents.
 
-One [real Kimi goal qualification (private source)](https://github.com/noxstellar/spine/blob/8d2c9dfdb69e47c0428765b2fd00cf6d1bdf0af5/rust/proofs/2026-11-16-kimi-goal-live/README.md)
+One [real Kimi goal qualification (private source)](https://github.com/noxstellar/spine/blob/9fd6ead1d43e4dde18927fc4592eccf3eda6e1c7/rust/proofs/2026-11-16-kimi-goal-live/README.md)
 passes three explicitly instructed work periods, a question wait with zero model
 calls, automatic resumption after the answer and independently accepted artifacts.
 It used 10 requests and 57.485 seconds. This small lifecycle observation does not
