@@ -1,5 +1,7 @@
 # Spine
 
+> **Version scope:** This public copy preserves the guide’s release and development labels. Features marked unreleased are not available in an older installed binary. Private-source links require repository access.
+
 **Spine 0.2.1** adds AUTO execution, ACP clients, persistent sessions, external
 MCP tools and local project memory.
 
@@ -11,6 +13,18 @@ same execution core. The compiled core is distributed publicly; its source
 repository stays private.
 
 [Why Spine?](#why-use-spine) · [Install](#install) · [Setup](#set-up-once) · [Measurements](#qualification)
+
+## Configuration and editors
+
+The [complete configuration reference](CONFIGURATION.md) lists provider setup,
+all runtime settings/defaults, reasoning effort, context, recursion and execution
+limits, with examples. Effort is optional and provider-specific. The guide
+clearly marks durable goals, optional lifetime caps and traces as **unreleased
+0.3 development**, separate from the installed v0.2.1 behavior.
+New goals default to continuous supervision with no overall cap; individual
+work periods remain bounded and unanswered questions stay pending.
+See [editor integration](EDITORS.md) for VS Code and IntelliJ/JetBrains via ACP;
+there is no Spine-branded editor extension or completed GUI qualification yet.
 
 ## Why use Spine?
 
