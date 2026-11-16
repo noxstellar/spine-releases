@@ -10,6 +10,91 @@ Research synthesis, data analysis, operational workflows and coding use the
 same execution core. The compiled core is distributed publicly; its source
 repository stays private.
 
+[Why Spine?](#why-use-spine) · [Install](#install) · [Setup](#set-up-once) · [Measurements](#qualification)
+
+## Why use Spine?
+
+**Choose Spine when you want a recursive agent inside your own application or
+workflow, with your choice of supported model and tools.** Its focus is scoped
+child tasks, explicit results returned to the parent, and one set of limits for
+the whole run. The same machinery handles research, operations and coding.
+
+### The core: recursive call and return
+
+Spine represents a run as an explicit stack of task frames. A parent can hand a
+scoped assignment to a child and wait. That child uses tools or delegates again;
+when it finishes, the parent resumes with a structured record:
+`result`, `artifacts`, `validation` and `unresolved`. The original goal and
+constraints stay available throughout the tree.
+
+For long work, this separates **local investigation from overall coordination**.
+The child uses its own working history; the parent receives its findings and
+artifact references rather than the full investigation transcript. A review of
+source claims can stay separate from writing a recommendation, while the parent
+remains responsible for integrating the answer. AUTO decides where to split at
+run time and can keep a small task direct.
+
+This is most useful when a goal contains parts with clear inputs and checkable
+outputs: research synthesis, reconciling several datasets, incident analysis or
+changes across code modules. If every part needs the same shared detail, a split
+can lose context or repeat work. Task design and the model still matter.
+
+| What you need | What Spine gives you | Evidence today |
+| --- | --- | --- |
+| Break complex work into focused investigations | A child works with its own context and returns findings, artifacts, validation and unresolved issues; the parent integrates the result. | Research and operations AUTO both passed with real child work. |
+| Put an agent into an existing system | ACP sessions plus multiple MCP servers connect your application, company RAG and approved actions. | Installed-binary checks cover client tools, stdio/HTTP MCP and session reload. |
+| Keep delegation within a controlled run | Children share request, tool, time and task limits; their tool scopes cannot widen ancestor permissions. | Accounting and scope controls are tested; live AUTO runs retain child usage in their totals. |
+| Stay in control during longer work | In-flight steering, persistent ACP sessions and inspectable execution reports; uncertain interrupted effects are not automatically replayed. | Installed-binary steering, cancellation and no-replay checks pass. |
+
+For example, ask for a recommendation from supplied research sources. A child
+can audit calculations and source claims, then return its findings to the parent
+writing the recommendation. For an incident plan, the parent can draft the plan
+and delegate a review against the original records. Both workflows were observed
+in the measured AUTO runs. Deeper trees are supported, but these runs used one
+child each; they do not prove a benefit from deeper recursion.
+
+### Does that make long work more reliable?
+
+Spine's execution controls are tested: descendants keep shared limits, scopes
+cannot widen, and uncertain interrupted effects are not automatically replayed.
+Those controls make a run bounded and inspectable. **Higher answer reliability
+than Codex or Claude Code has not been demonstrated.** A structured review can
+still be wrong, and two accepted AUTO tasks are not a reliability rate.
+
+Parent resumption after child completion is part of the recursive runtime.
+ACP session reload restores retained conversation, not an interrupted task tree;
+an uncertain unfinished turn blocks new work. Long work still needs explicit
+limits and review of its recorded results.
+
+### How does it compare with Codex and Claude Code?
+
+Both [Codex](https://learn.chatgpt.com/docs/agent-configuration/subagents) and
+[Claude Code](https://code.claude.com/docs/en/sub-agents#let-subagents-spawn-their-own-subagents)
+also support delegation. Recursion is not exclusive to Spine. Choose Spine for
+the combination of configurable providers, ACP/MCP integration, explicit recursive
+handoffs and shared execution limits when that fits your system.
+
+**There are measured benefits, with specific limits:**
+
+| Measured comparison | Benefit observed | Tradeoff / scope |
+| --- | --- | --- |
+| Two earlier Python coding tasks: Spine DIRECT vs Codex DIRECT | Both tasks accepted; Spine used **29.4% fewer input tokens and 17.9% fewer output tokens**. | Historical Rust 0.1.0 qualification binary, not current AUTO. Claude used fewer input tokens than Spine. The third, harder task failed in all three harnesses. |
+| Research: v0.2.1 AUTO vs Spine DIRECT | Both accepted; AUTO used **9.4% fewer input tokens** and 10 rather than 12 tool calls. | Output tokens rose 8.5%; requests stayed at 13 and elapsed time was similar. |
+| Operations: v0.2.1 AUTO vs Spine DIRECT | AUTO **performed a real child review and passed**; DIRECT failed for claiming an independent review that had not occurred. | Both produced correct artifacts. AUTO used 16 rather than 10 requests and took 216.7 rather than 150.1 seconds. |
+
+These are single attempts on frozen tasks using the same GPT-6.1 Sol/high model
+setting. Token counts are not monetary costs. In the newer research/operations
+study, Codex DIRECT and Claude DIRECT also passed both tasks after the citation
+checker correction. Spine AUTO used more total tokens and time than either peer's
+DIRECT baseline; peer AUTO was not tested. **General superiority or full parity
+with Codex/Claude Code is not established.** See the
+[measurements and conditions](#qualification).
+
+Current tradeoffs: children run sequentially, public binaries target Apple Silicon
+macOS, source is private, and live-web research needs external search tools.
+If those constraints conflict with your workflow, the evidence does not justify
+switching from a harness that already meets your needs.
+
 ## Install
 
 **Apple Silicon macOS.** For the default native tools, install and start
@@ -93,12 +178,6 @@ needed. These tools calculate from local data and produce reports as well as
 build and test code.
 The worker has no network. Supply source files, or connect appropriate external
 MCP search/RAG tools through ACP for web or company information.
-
-[Codex has subagent workflows](https://learn.chatgpt.com/docs/agent-configuration/subagents),
-and [Claude Code has nested subagents](https://code.claude.com/docs/en/sub-agents#let-subagents-spawn-their-own-subagents).
-Spine emphasizes a Rust runtime that can be embedded through ACP/MCP, explicit
-return/resume behavior and shared execution limits. Those design choices do not
-establish superiority; measured task results are scoped below.
 
 ## Execution modes and limits
 
@@ -241,13 +320,63 @@ Its failed grade is retained; a separately reviewed offline correction was appli
 to all four operations outputs. Original acceptance was 6/8; adjudicated acceptance
 is 7/8. Spine DIRECT's real reporting failure remains disqualifying.
 
-One attempt per row used GPT-6.1 Sol/high, the published v0.2.1 binary and a common
-bounded tool bridge. The research task used a frozen real-source packet; operations
+Every row used GPT-6.1 Sol/high and a common bounded tool bridge; Spine used the
+published v0.2.1 binary. The research task used a frozen real-source packet; operations
 used synthetic records. This was not live-web research. The study allowed 8,192
 output tokens per call (the CLI default is 4,096). DIRECT disabled peer delegation;
 the two AUTO rows are separate within-Spine observations, not matched peer AUTO
 parity or a general quality, speed or cost advantage.
 <!-- GENERAL_TASK_RESULTS_END -->
+
+<details>
+<summary>Measured usage, historical coding comparison and evaluation conditions</summary>
+
+**Research and operations, published v0.2.1 (15 November 2026):**
+
+| Task | Harness / mode | Requests | Tools | Input tokens | Output tokens | Seconds |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| Research | Codex DIRECT | 10 | 9 | 196,532 | 14,478 | 238.0 |
+| Research | Claude Code DIRECT | 9 | 11 | 151,170 | 13,730 | 253.5 |
+| Research | Spine DIRECT | 13 | 12 | 223,923 | 14,384 | 249.2 |
+| Research | Spine AUTO | 13 | 10 | 202,955 | 15,607 | 251.6 |
+| Operations | Codex DIRECT | 9 | 8 | 154,873 | 10,606 | 152.7 |
+| Operations | Claude Code DIRECT | 9 | 9 | 128,592 | 9,102 | 119.7 |
+| Operations | Spine DIRECT (failed) | 10 | 9 | 130,468 | 10,994 | 150.1 |
+| Operations | Spine AUTO | 16 | 13 | 209,790 | 18,029 | 216.7 |
+
+Spine used the installed v0.2.1 binary; comparator clients were Codex
+0.164.0-alpha.11.1 and Claude Code 2.1.319. The common limits were 32 requests,
+64 workspace calls, 900 seconds and 8,192 output tokens per call. AUTO shared
+these limits across at most 16 tasks/depth four. Each observed AUTO run used
+one child at depth one. Provider settings were GPT-6.1 Sol/high; the provider
+does not expose an immutable model digest. Client prompts/history formats
+remain part of each harness. Peer delegation was disabled in DIRECT.
+
+**Earlier Python coding tasks, historical Rust 0.1.0 qualification binary:**
+
+All three DIRECT harnesses accepted both `dependency_plan` and `layered_config`
+tasks and all 59 target groups under matched Sol/high conditions. Totals for
+those two tasks:
+
+| Harness, DIRECT | Requests | Tools | Input tokens | Output tokens |
+| --- | ---: | ---: | ---: | ---: |
+| Codex | 16 | 14 | 150,073 | 12,253 |
+| Claude Code | 13 | 11 | 50,759 | 11,177 |
+| Spine | 15 | 13 | 106,011 | 10,059 |
+
+Spine used 29.36% fewer input and 17.91% fewer output tokens than Codex.
+Against Claude, it used 10.00% fewer output tokens but 108.85% more input tokens.
+The third, harder Rust task failed in all three harnesses. These older DIRECT
+results do not establish an advantage for current AUTO.
+
+**Evidence scope:** each row is one attempt, with no retries or budget resets.
+Project-reported acceptance combines mechanical checks and separate independent
+assistant reviews of artifacts and evidence; it is not third-party certification.
+Full traces, assessors and reference solutions remain private. Counts are reported
+usage, not invoices or reliability estimates. Different release/policy cohorts
+are not combined into a single success rate.
+
+</details>
 
 Public packages include setup scripts, runtime helpers and third-party notices;
 they do not contain the Rust source checkout or internal benchmark evidence.
