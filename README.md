@@ -59,7 +59,7 @@ can lose context or repeat work. Task design and the model still matter.
 
 | What you need | What Spine gives you | Evidence today |
 | --- | --- | --- |
-| Break complex work into focused investigations | A child works with its own context and returns findings, artifacts, validation and unresolved issues; the parent integrates the result. | Research and operations AUTO both passed with real child work. |
+| Break complex work into focused investigations | A child works with its own context and returns findings, artifacts, validation and unresolved issues; the parent integrates the result. | Earlier v0.2.1 research and operations AUTO both passed with real child work; the newer pilot used a child for operations only. |
 | Put an agent into an existing system | ACP sessions plus multiple MCP servers connect your application, company RAG and approved actions. | Installed-binary checks cover client tools, stdio/HTTP MCP and session reload. |
 | Keep delegation within a controlled run | Children share request, tool, time and task limits; their tool scopes cannot widen ancestor permissions. | Accounting and scope controls are tested; live AUTO runs retain child usage in their totals. |
 | Stay in control during longer work | In-flight steering, persistent ACP sessions and inspectable execution reports; uncertain interrupted effects are not automatically replayed. | Installed-binary steering, cancellation and no-replay checks pass. |
@@ -68,7 +68,7 @@ For example, ask for a recommendation from supplied research sources. A child
 can audit calculations and source claims, then return its findings to the parent
 writing the recommendation. For an incident plan, the parent can draft the plan
 and delegate a review against the original records. Both workflows were observed
-in the measured AUTO runs. Deeper trees are supported, but these runs used one
+in the earlier v0.2.1 AUTO runs. Deeper trees are supported, but those runs used one
 child each; they do not prove a benefit from deeper recursion.
 
 ### Does that make long work more reliable?
@@ -77,7 +77,7 @@ Spine's execution controls are tested: descendants keep shared limits, scopes
 cannot widen, and uncertain interrupted effects are not automatically replayed.
 Those controls make a run bounded and inspectable. **Higher answer reliability
 than Codex or Claude Code has not been demonstrated.** A structured review can
-still be wrong, and two accepted AUTO tasks are not a reliability rate.
+still be wrong, and a few selected task instances are not a reliability rate.
 
 Parent resumption after child completion is part of the recursive runtime.
 ACP session reload restores retained conversation, not an interrupted task tree;
@@ -96,15 +96,18 @@ handoffs and shared execution limits when that fits your system.
 
 | Measured comparison | Benefit observed | Tradeoff / scope |
 | --- | --- | --- |
+| Four-task development pilot, delegation enabled for all three harnesses | Spine AUTO accepted **3/4**, peers **2/4 each**; Spine covered every peer-passed instance. | Only two jointly accepted pairs per peer. AUTO used 9.75% fewer input tokens than Codex but 10.47% more than Claude by geometric mean, missing the fixed 10% improvement threshold; it was slower on both tasks. |
 | Two earlier Python coding tasks: Spine DIRECT vs Codex DIRECT | Both tasks accepted; Spine used **29.4% fewer input tokens and 17.9% fewer output tokens**. | Historical Rust 0.1.0 qualification binary, not current AUTO. Claude used fewer input tokens than Spine. The third, harder task failed in all three harnesses. |
 | Research: v0.2.1 AUTO vs Spine DIRECT | Both accepted; AUTO used **9.4% fewer input tokens** and 10 rather than 12 tool calls. | Output tokens rose 8.5%; requests stayed at 13 and elapsed time was similar. |
 | Operations: v0.2.1 AUTO vs Spine DIRECT | AUTO **performed a real child review and passed**; DIRECT failed for claiming an independent review that had not occurred. | Both produced correct artifacts. AUTO used 16 rather than 10 requests and took 216.7 rather than 150.1 seconds. |
 
-These are single attempts on frozen tasks using the same GPT-6.1 Sol/high model
-setting. Token counts are not monetary costs. In the newer research/operations
-study, Codex DIRECT and Claude DIRECT also passed both tasks after the citation
-checker correction. Spine AUTO used more total tokens and time than either peer's
-DIRECT baseline; peer AUTO was not tested. **General superiority or full parity
+These are separate studies with one attempt per condition, using GPT-6.1 Sol
+with high effort requested. Token counts are not monetary costs. The newest
+pilot enabled peer delegation; only Spine AUTO's operations run actually used
+a child. Its common gateway preserved public history and excluded private
+reasoning for every harness, so it does not compare unrestricted vendor defaults.
+The earlier v0.2.1 research/operations study disabled peer delegation and retains
+its separate citation-check correction. **General superiority or full parity
 with Codex/Claude Code is not established.** See the
 [measurements and conditions](#qualification).
 
@@ -307,6 +310,34 @@ replace `0.2.1` above with a complete version from the
 Nightly checks establish build and test results, not new model benchmark results.
 
 ## Qualification
+
+**Closed development pilot, 16 November:** Spine AUTO accepted lookup, research
+and operations (**3/4**); Codex and Claude Code each accepted research and
+operations (**2/4**). All three failed the workflow's complete delivery contract
+within its frozen request cap. Spine DIRECT accepted both complex diagnostics
+(2/2), excluded from the primary sample. Only AUTO operations used an actual
+child review. All 14 attempts, including five failures, consumed 129 requests,
+118 tools, 1,294,333 input / 72,132 output tokens and 1,259.403 summed seconds
+including setup and cleanup.
+
+Spine covered the union of peer-passed instances (**2/2**). On the two jointly
+accepted pairs per peer, AUTO/peer input geometric means were **0.902463 versus
+Codex** and **1.104696 versus Claude**. Neither met the fixed 10% improvement
+threshold; AUTO was slower on both tasks than either peer. These four authored
+instances do not establish general parity, production readiness or a broad
+efficiency advantage.
+
+This study used frozen development runtime `6ff0ba8`, not the v0.2.1 package or
+the ongoing verification changes. Every harness used the same Sol model with
+high effort requested, common public inputs/tools and bounded accounts. The
+gateway sent full public history with `store=false`, omitting private reasoning;
+native prompts, tool presentation and internal delegation limits remained
+distinct. It was a controlled comparison, not unrestricted vendor defaults.
+Original grades, a separately stopped permission-profile study, uniform generic
+read-evidence corrections and independent acceptance supplements are retained.
+The renewed first nine rows and five never-launched continuation rows form the
+14 observations; no completed row was retried or replenished. The immutable
+analysis SHA-256 is `5e815bf746d4101f26422231e78cad13ec60d829046d583d00851a6acc21412c`.
 
 Public builds target macOS ARM64, with Docker as the default native tool host.
 The published v0.2.1 release passed hosted checks, anonymous installation and
