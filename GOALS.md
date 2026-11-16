@@ -3,7 +3,7 @@
 > **Version scope:** This public copy preserves the guide’s release and development labels. Features marked unreleased are not available in an older installed binary. Private-source links require repository access.
 
 This interface is under qualification. Public v0.2.1 does not include it.
-See [the release plan (private source)](https://github.com/noxstellar/spine/blob/6ff0ba84d7d442abd3b96e65cbe0add115f11b02/rust/NEXT_RELEASE_PLAN.md) for remaining gates and the
+See [the release plan (private source)](https://github.com/noxstellar/spine/blob/77a097a/rust/NEXT_RELEASE_PLAN.md) for remaining gates and the
 [configuration reference](CONFIGURATION.md) for all defaults and examples.
 
 A goal records its objective and acceptance requirements **before any model
@@ -320,3 +320,9 @@ For optional graph/timeline diagnostics, use `SPINE_TRACE=1 spine goal run ID`
 and `spine trace REPORT.trace.jsonl --html review.html`. Each period gets its own
 trace. Details and coverage limits are in [tracing](TRACING.md). Scripted lifecycle
 controls do not prove week-scale model competence or superiority over other agents.
+
+One [real Kimi goal qualification (private source)](https://github.com/noxstellar/spine/blob/77a097a/rust/proofs/2026-11-16-kimi-goal-live/README.md)
+passes three explicitly instructed work periods, a question wait with zero model
+calls, automatic resumption after the answer and independently accepted artifacts.
+It used 10 requests and 57.485 seconds. This small lifecycle observation does not
+establish long-term reliability or comparison with another harness.

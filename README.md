@@ -23,6 +23,10 @@ clearly marks durable goals, optional lifetime caps and traces as **unreleased
 0.3 development**, separate from the installed v0.2.1 behavior.
 New goals default to continuous supervision with no overall cap; individual
 work periods remain bounded and unanswered questions stay pending.
+A real Kimi goal trial completed three instructed work periods, waited for an
+answer without model calls, resumed and passed independent artifact checks:
+10 requests in 57.485 seconds. See [the goal guide](GOALS.md) for the evidence
+scope; this small result does not establish week-scale reliability or peer parity.
 See [editor integration](EDITORS.md) for VS Code and IntelliJ/JetBrains via ACP;
 there is no Spine-branded editor extension or completed GUI qualification yet.
 
