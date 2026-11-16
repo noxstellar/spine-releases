@@ -30,6 +30,13 @@ scope; this small result does not establish week-scale reliability or peer parit
 See [editor integration](EDITORS.md) for VS Code and IntelliJ/JetBrains via ACP;
 there is no Spine-branded editor extension or completed GUI qualification yet.
 
+Development also includes opt-in consumer assessment: a parent can reject a
+child result and resume that child for correction before using its output.
+It is separate from independent acceptance; durable review carryover and live
+efficacy are still being qualified. The experimental assignment encoder targets
+repeated prompt text, with live token and speed gains unproven. Both switches and
+their defaults are documented in [configuration](CONFIGURATION.md).
+
 ## Why use Spine?
 
 **Choose Spine when you want a recursive agent inside your own application or

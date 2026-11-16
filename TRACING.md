@@ -40,7 +40,7 @@ SPINE_TRACE=details spine run /path/to/workspace 'Review the supplied research s
 | Setting | Recorded content |
 | --- | --- |
 | Unset, `0` or `off` | No optional trace file or trace projection. |
-| `1` or `summary` | Task IDs and parent relationships, delegation, charged tool names, observed result/error flags, steering revisions, public-message lengths, work counters, step durations, request usage and stop status. No prompt, tool argument/result, message or error-text content. |
+| `1` or `summary` | Task IDs and parent relationships, delegation, candidate IDs and consumer dispositions, charged tool names, observed result/error flags, steering revisions, public-message lengths, work counters, step durations, request usage and stop status. No prompt, tool argument/result, message or error-text content. |
 | `details` | Summary plus bounded previews of goals, requirements, tool arguments/results, public messages, decision errors and child/root returns. |
 
 An invalid setting rejects execution before dispatch. The raw CLI writes
@@ -72,6 +72,14 @@ task's acceptance checks and retained artifacts to judge correctness. Cleanup
 failures, incomplete coverage and model-reported goal outcomes are displayed
 separately. Timing is measured at step boundaries, not inferred as individual
 model/tool latency. Missing provider token usage is not zero cost.
+
+With experimental consumer assessment enabled, the graph distinguishes
+`awaiting review`, `repair requested`, `steering invalidated review` and
+`reviewed input`. These labels come from typed runtime transitions, not text
+parsed from a model's answer. `reviewed input` means the parent accepted that
+candidate for its own work; it is not independent task acceptance. Candidate IDs
+identify returns within one run. Detailed mode can show the accompanying bounded
+public feedback; neither mode records private reasoning.
 
 The recorder emits `step_started` before entering a runtime step; this is not
 proof that a provider request or tool action has already been dispatched. Other
@@ -105,6 +113,6 @@ detect arbitrary secrets embedded in prose or source**. Treat detailed traces
 like task data. The recorder never reads raw provider bodies, headers or private
 reasoning. No tracing mode exposes these files as model tools.
 
-See [the local verification record (private source)](https://github.com/noxstellar/spine/blob/8f15c7e4cbf463c5a629426494011fac7f303909/rust/proofs/2026-11-16-execution-tracing/README.md)
+See [the local verification record (private source)](https://github.com/noxstellar/spine/blob/8d2c9dfdb69e47c0428765b2fd00cf6d1bdf0af5/rust/proofs/2026-11-16-execution-tracing/README.md)
 for checks and scope. These diagnostics help investigate behavior; they do not
 by themselves establish improved model quality or peer parity.

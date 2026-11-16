@@ -267,6 +267,7 @@ model adapter; simply naming models from two unrelated providers is insufficient
 | `SPINE_CONTEXT` | `embedded` when feature + `.spine/memory` exist, otherwise `workspace` | `workspace`, `embedded`, `empty`. Embedded requires the `embedded-rag` build feature. Empty disables automatic retrieval, not explicit tools or task/history input. |
 | `SPINE_MODEL_HISTORY` | Launcher `snapshot`; raw host `replay` | Snapshot sends public state; replay reconstructs public action/tool turns. Provider-private reasoning is not retained. |
 | `SPINE_SNAPSHOT_TRANSPORT` | `state` | `state` or `tool_turns`. Tool turns requires native + snapshot; incompatible with Responses. |
+| `SPINE_COMPACT_ASSIGNMENTS` | `0` | Experimental `0`/`1`; requires snapshot + state transport. Aliases only exactly equal trusted original request, local goal and current instruction strings, with at least 512 net message bytes saved including protocol overhead. Small/ineligible requests keep their existing rendering. Canonical state, history and request limits stay unchanged; enabled policy is bound to the durable profile. Token/latency savings and equivalent model behavior are not yet live-qualified. |
 | `SPINE_SNAPSHOT_RECENT_OBSERVATIONS` | Unset: full snapshot | Positive recent-observation count. Requires snapshot; zero is rejected. Retains specified important child/error records, with specialized historical policies as described in source. |
 | `SPINE_BUDGETED_SNAPSHOT_WINDOW` | `0` | `0`/`1`; optional byte-budget packing. Requires snapshot, a recent-observation window and a request account. Omitted history stays identified; this does not reset state. |
 | `SPINE_FAILURE_CONTEXT` | `0` | `0`/`1`; adds bounded evidence from owned failures; requires workspace context. |
@@ -304,6 +305,7 @@ Published studies qualify exact configurations, not every policy combination.
 | --- | --- | --- |
 | `SPINE_AUTO_WORKFLOW` | `agent` | AUTO policy. Other values: `adaptive`, `producer_handoff`, `implementation_review_handoff`, `test_first_handoff`, `staged_handoff`, `implementation_test_handoff`, `obligation_test_handoff`, `evidenced_test_handoff`, `direct_test_handoff`. Other modes keep their own policy. |
 | `SPINE_VERIFICATION_POLICY` | Unset | JSON `{ "id": "…", "checks": [{"name":"…","arguments":{}}], "effect_tools": ["…"] }`. Exact caller-owned ToolCalls define observed checks; no semantic correctness oracle. Native tools required. |
+| `SPINE_RETURN_VERIFICATION` | `off` | **0.3 development, experimental:** `consumer` holds each nonroot completion for parent assessment. Acceptance can include one ordinary next action in the same request; repair reuses the child and spent counters. Shares ordinary model/request limits. Model review is fallible and does not establish whole-goal acceptance. Unsupported model profiles and mode changes on resume reject before dispatch. |
 | `SPINE_PUBLIC_CHECK_SET` | Unset | JSON with optional `preparation` ToolCalls and `author_preparation` check indices; check calls come from the verification policy. Exposes the configured aggregate action. |
 | `SPINE_CALLER_RESERVE` | Applicable default: tools `min(max_tools/3,8)`, decisions `min(max_steps/4,6)` | JSON with exactly integer `tools` and `decisions`; supported by AUTO adaptive/producer/implementation-review policies. Explicit reserve must leave producer capacity and fund checks plus delivery. |
 | `SPINE_DIRECT_CALLER_TOOL_RESERVE` | `min(max_tools/3,8)` | Positive explicit tool reserve only for `direct_test_handoff` with a native public check set; must fit its configured checks and leave producer capacity. |
@@ -321,9 +323,23 @@ within 8,192 serialized bytes. Its calls must be `workspace.run` with explicit
 and valid, and require host mutation metadata. Evidenced-test/direct-test
 policies also require that metadata. These reserves allocate existing capacity;
 they do not create extra calls or independent proof of task correctness.
-**0.3 development durable goals currently reject `SPINE_VERIFICATION_POLICY`
-and `SPINE_PUBLIC_CHECK_SET`**; their separate stored completion policy is
-described next.
+Consumer assessment supports ordinary Agent, Task, Objective and Adaptive model
+policies; historical staged policies and the native public-record envelope are
+not supported. When public work records are enabled, use their `assistant_text`
+transport. Native Chat Completions, structured decisions and Responses retain
+their existing provider requirements. This first consumer mode does not add an
+independent root reviewer. The [adaptive default (private source)](https://github.com/noxstellar/spine/blob/8d2c9dfdb69e47c0428765b2fd00cf6d1bdf0af5/rust/VERIFICATION_DESIGN.md) still
+requires efficacy, overhead and durable-state qualification.
+
+```sh
+# Unreleased experimental consumer assessment, using your configured provider.
+SPINE_RETURN_VERIFICATION=consumer spine run /absolute/workspace 'your task'
+```
+
+**0.3 development durable goals currently reject `SPINE_VERIFICATION_POLICY`,
+`SPINE_PUBLIC_CHECK_SET` and consumer return verification**; pending assessments
+must survive period transitions before that profile is enabled. Their separate
+stored completion policy is described next.
 
 ## Durable goals: optional overall limits (0.3 development)
 
