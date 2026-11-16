@@ -305,7 +305,7 @@ Published studies qualify exact configurations, not every policy combination.
 | --- | --- | --- |
 | `SPINE_AUTO_WORKFLOW` | `agent` | AUTO policy. Other values: `adaptive`, `producer_handoff`, `implementation_review_handoff`, `test_first_handoff`, `staged_handoff`, `implementation_test_handoff`, `obligation_test_handoff`, `evidenced_test_handoff`, `direct_test_handoff`. Other modes keep their own policy. |
 | `SPINE_VERIFICATION_POLICY` | Unset | JSON `{ "id": "…", "checks": [{"name":"…","arguments":{}}], "effect_tools": ["…"] }`. Exact caller-owned ToolCalls define observed checks; no semantic correctness oracle. Native tools required. |
-| `SPINE_RETURN_VERIFICATION` | `off` | **0.3 development, experimental:** `consumer` holds each nonroot completion for parent assessment. Acceptance can include one ordinary next action; repair reuses the child and spent counters; `ask` retains a candidate-bound question without polling. Shares ordinary model/request limits. Model review is fallible and does not establish whole-goal acceptance. Unsupported model profiles and mode changes on resume reject before dispatch. |
+| `SPINE_RETURN_VERIFICATION` | `off` | **0.3 development, experimental:** `consumer` holds each nonroot completion for parent assessment. `inspect` can read through an explicitly admitted host capability while the candidate remains pending; acceptance can include one ordinary next action. Repair reuses the child and spent counters; `ask` retains a candidate-bound question without polling. Shares ordinary model/request/tool limits. Model review is fallible and does not establish whole-goal acceptance. Unsupported model profiles and mode changes on resume reject before dispatch. |
 | `SPINE_PUBLIC_CHECK_SET` | Unset | JSON with optional `preparation` ToolCalls and `author_preparation` check indices; check calls come from the verification policy. Exposes the configured aggregate action. |
 | `SPINE_CALLER_RESERVE` | Applicable default: tools `min(max_tools/3,8)`, decisions `min(max_steps/4,6)` | JSON with exactly integer `tools` and `decisions`; supported by AUTO adaptive/producer/implementation-review policies. Explicit reserve must leave producer capacity and fund checks plus delivery. |
 | `SPINE_DIRECT_CALLER_TOOL_RESERVE` | `min(max_tools/3,8)` | Positive explicit tool reserve only for `direct_test_handoff` with a native public check set; must fit its configured checks and leave producer capacity. |
@@ -328,17 +328,36 @@ policies; historical staged policies and the native public-record envelope are
 not supported. When public work records are enabled, use their `assistant_text`
 transport. Native Chat Completions, structured decisions and Responses retain
 their existing provider requirements. This first consumer mode does not add an
-independent root reviewer. The [adaptive default (private source)](https://github.com/noxstellar/spine/blob/9fd6ead1d43e4dde18927fc4592eccf3eda6e1c7/rust/VERIFICATION_DESIGN.md) still
+independent root reviewer. The [adaptive default (private source)](https://github.com/noxstellar/spine/blob/98957d414fcb6c6060bcfe3045b5c364d4b39983/rust/VERIFICATION_DESIGN.md) still
 requires efficacy, overhead and durable-state qualification.
 
-The current `consumer_v2` profile adds bounded questions (at most 8,192 UTF-8
-bytes). The runtime exposes a typed suspension and saves the unresolved child;
+The current development profile is `consumer_v3`. It retains the bounded questions
+(at most 8,192 UTF-8 bytes) introduced in `consumer_v2`. The runtime exposes a typed suspension and saves the unresolved child;
 repeated suspended steps consume no model, context or tool calls and no active
 execution time. An accepted answer is trusted steering, not permission to accept
 the old result. This does not yet provide durable-goal question handling for
-consumer mode. See the [scoped continuation checks (private source)](https://github.com/noxstellar/spine/blob/9fd6ead1d43e4dde18927fc4592eccf3eda6e1c7/rust/proofs/2026-11-16-consumer-continuation/README.md).
-Earlier `consumer_v1` checkpoints retain their original executable/profile;
+consumer mode. See the [scoped continuation checks (private source)](https://github.com/noxstellar/spine/blob/98957d414fcb6c6060bcfe3045b5c364d4b39983/rust/proofs/2026-11-16-consumer-continuation/README.md).
+Earlier `consumer_v1` and `consumer_v2` checkpoints retain their original executable/profile;
 changing the interface does not authorize resetting their accounting.
+
+For consumer mode with the built-in native workspace tools, the host adds
+`workspace.inspect_artifact` with arguments `{"path":"relative/file.txt"}`.
+The parent may select it through the assessment's `inspect` disposition before
+accepting the child. This consumes one ordinary model decision and one tool call;
+it neither releases queued siblings nor grants extra allowance. The reader returns
+one complete UTF-8 file of at most 32,768 bytes, its SHA-256 and byte count. It
+rejects symlinks, hardlinks, special files, noncanonical paths, protected-file hash
+mismatches and changes detected during the read. A captured file revision is
+evidence for review, not proof of semantic correctness or future freshness.
+
+The inspector requires `SPINE_NATIVE_TOOLS=1` and no custom `SPINE_TOOL_SERVER`.
+It observes the parent's ordinary allowed-tool scope and host permission callbacks.
+External MCP names or `readOnlyHint` annotations do not grant this capability.
+An embedding host may explicitly implement the default-deny inspection methods
+on `Tools`; it owns admission and read-only behavior. `StepRequest` now includes
+`return_inspection_tools` in the prospective 0.3 Rust API; empty catalogs are omitted
+from serialized ordinary requests. Consumer mode remains off by default pending
+adaptive-policy and efficacy/cost qualification.
 
 ```sh
 # Unreleased experimental consumer assessment, using your configured provider.

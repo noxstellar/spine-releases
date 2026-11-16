@@ -81,6 +81,11 @@ candidate for its own work; it is not independent task acceptance. Candidate IDs
 identify returns within one run. Detailed mode can show the accompanying bounded
 public feedback; neither mode records private reasoning.
 
+Pending artifact inspection appears as an ordinary charged tool operation while
+the child stays `awaiting review`. The tool result does not change that label or
+create a verified-completion receipt. Only a later typed assessment settles the
+candidate; inspection, repair and acceptance remain distinct steps.
+
 The recorder emits `step_started` before entering a runtime step; this is not
 proof that a provider request or tool action has already been dispatched. Other
 records are appended at observed step boundaries. A live read shows the complete
@@ -113,6 +118,6 @@ detect arbitrary secrets embedded in prose or source**. Treat detailed traces
 like task data. The recorder never reads raw provider bodies, headers or private
 reasoning. No tracing mode exposes these files as model tools.
 
-See [the local verification record (private source)](https://github.com/noxstellar/spine/blob/9fd6ead1d43e4dde18927fc4592eccf3eda6e1c7/rust/proofs/2026-11-16-execution-tracing/README.md)
+See [the local verification record (private source)](https://github.com/noxstellar/spine/blob/98957d414fcb6c6060bcfe3045b5c364d4b39983/rust/proofs/2026-11-16-execution-tracing/README.md)
 for checks and scope. These diagnostics help investigate behavior; they do not
 by themselves establish improved model quality or peer parity.
