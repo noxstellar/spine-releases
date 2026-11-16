@@ -345,8 +345,8 @@ conservatively from reserved period time, not advertised as exact elapsed usage.
 ### Goal specification
 
 `spine goal create WORKSPACE SPEC_FILE` supplies `cwd` from its workspace argument;
-do **not** put `cwd` in that CLI JSON file. The ACP goal API supplies the session
-workspace. A minimal specification is:
+do **not** put `cwd` in that CLI JSON file. ACP callers must include `cwd` in the
+goal object; Spine checks that it matches the session workspace. A minimal CLI specification is:
 
 ```json
 {
@@ -440,6 +440,12 @@ natural-language requirement. The explicit legacy policy
 Corrections, answers and human wake messages prevent the old predicates from
 automatically accepting revised work. Passing checks then require explicit
 confirmation. Mechanical scheduled wakes do not alter that acceptance scope.
+The first ACP prompt for a ready attached goal is also a retained user correction,
+so it makes configured-check acceptance require confirmation. To preserve an
+unchanged predeclared contract, use the CLI goal driver.
+Amendments do not edit budgets or configured predicates. An obsolete failing
+predicate cannot be bypassed with `accept`; a changed machine contract needs a
+new goal specification and explicit cancellation of the previous goal.
 
 ```sh
 spine goal create /absolute/workspace /outside/workspace/goal.json

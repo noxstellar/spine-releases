@@ -3,7 +3,7 @@
 > **Version scope:** This public copy preserves the guide’s release and development labels. Features marked unreleased are not available in an older installed binary. Private-source links require repository access.
 
 This interface is under qualification. Public v0.2.1 does not include it.
-See [the release plan (private source)](https://github.com/noxstellar/spine/blob/55442fd5d2cc6a3cd3e2472d3039f93b43265ab4/rust/NEXT_RELEASE_PLAN.md) for remaining gates and the
+See [the release plan (private source)](https://github.com/noxstellar/spine/blob/6ff0ba84d7d442abd3b96e65cbe0add115f11b02/rust/NEXT_RELEASE_PLAN.md) for remaining gates and the
 [configuration reference](CONFIGURATION.md) for all defaults and examples.
 
 A goal records its objective and acceptance requirements **before any model
@@ -183,8 +183,15 @@ expectations outside the model's workspace.
 Corrections, answers and human wake messages can change requirements. They prevent
 old predicates from automatically accepting revised work; passing checks then
 require explicit confirmation. Mechanical scheduled wakes do not change this
-scope. Immutable acceptance receipts retain the candidate identity. Stale
+scope. The initial ACP prompt for a ready attached goal is also a user correction;
+it therefore requires confirmation after passing checks. CLI supervision does
+not insert an initial correction. Immutable acceptance receipts retain the candidate identity. Stale
 confirmations and changed reports/artifacts are rejected.
+
+Amendments do not rewrite configured predicates or budgets. If changed requirements
+conflict with an old exact predicate, explicit acceptance cannot override that
+failure. Create a goal with the revised contract and explicitly cancel the old
+one; Spine does not infer a new machine-checkable predicate from free text.
 
 Explicit `{"mode":"model_declared"}` preserves the legacy declaration-only
 behavior, terminating at `model_completed`. Legacy records keep their policy and
@@ -249,16 +256,52 @@ goal control until then. See [editors](EDITORS.md) and [ACP](ACP.md).
 Records live outside the workspace under `$XDG_STATE_HOME/spine/goals`, normally
 `~/.local/state/spine/goals`. Reports retain paths, hashes and accounting. Exact
 older periods and user input remain in immutable hash-bound archives; only recent
-records and bounded indexes remain in the active view. Current work receives the
+records and bounded indexes remain in the active view. The hot input window holds
+at most eight entries and 128 KiB serialized; unusually escaped input can use
+fewer entries. Current work receives the
 original requirements, recent input, history locators and latest progress with
 remaining obligations. An archive locator is not a semantic summary of old input.
 
-The scoped `goal_history` tool retrieves exact settled progress in UTF-8 pages.
+The scoped `goal_history` tool retrieves exact settled progress, user input and
+safe work-slice checkpoints in UTF-8 pages:
+
+```json
+{"index": 0, "record": "progress", "max_bytes": 4096}
+```
+
+```json
+{"index": 0, "record": "user_input", "input_kind": "correction", "max_bytes": 4096}
+```
+
+```json
+{"index": 0, "record": "execution", "max_bytes": 4096}
+```
+
+`progress` is the default. For user input, `index` is the zero-based global
+input index, or the ordinal within the optional `input_kind`. Execution records
+contain observed public work and explicitly unexecuted pending actions; a
+`prior_continuation` locator preserves the chain to earlier slices. Follow
+`next_offset` to read later pages. The page request defaults to 4,096 bytes and
+permits at most 8,192, within the 16 KiB encoded output bound.
+
 It costs one ordinary tool unit, obeys ancestor restrictions and must appear in
 an explicit `allowed_tools` list. Reads verify report identity, hashes and settled
 accounting. Pages are capped at 16 KiB including JSON escaping. Arbitrary paths,
 other goals and private reports are inaccessible. External MCP names are
 namespaced and cannot impersonate the internal tool.
+
+New acceptance-based goals may continue after a typed limit reached between
+completed steps, or an accounted pre-dispatch request-limit refusal that can fit
+a fresh period. The host first verifies closed resources, exact checkpoint and
+accounting, then replans from the retained observations under the same goal
+account. It never resumes a failed task stack with reset limits. Required history
+retrieval must remain permitted and affordable. Repeated identical public work
+asks for direction instead of spinning.
+
+Generic provider errors, malformed returns and unmarked tool/task/depth failures
+are not silently classified as safe work slices. They remain explicit blockers;
+in-flight uncertain effects retain their ownership fence. Explicit legacy
+`model_declared` execution preserves its original limit behavior.
 
 A missing report, uncertain action, damaged accounting or failed cleanup keeps
 the active period and reservation fenced. Restart or elapsed time does not grant
