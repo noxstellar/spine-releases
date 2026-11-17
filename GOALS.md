@@ -3,7 +3,7 @@
 > **Version scope:** This public copy preserves the guide’s release and development labels. Features marked unreleased are not available in an older installed binary. Private-source links require repository access.
 
 This interface is under qualification. Public v0.2.1 does not include it.
-See [the release plan (private source)](https://github.com/noxstellar/spine/blob/bb5310820bd657487a27329039a49e592a8acaf7/rust/NEXT_RELEASE_PLAN.md) for remaining gates and the
+See [the release plan (private source)](https://github.com/noxstellar/spine/blob/39ff6d955eeaaf881b51ac2966fcabd4e846ffc0/rust/NEXT_RELEASE_PLAN.md) for remaining gates and the
 [configuration reference](CONFIGURATION.md) for all defaults and examples.
 
 A goal records its objective and acceptance requirements **before any model
@@ -81,6 +81,11 @@ boundary; a late correction remains available to the next period. Results based
 on an earlier revision cannot complete a revised goal. An explicit amendment
 reopens an accepted/model-completed goal under its existing limits.
 
+New answer records retain the exact question ID and text with the unchanged
+answer, including after history compaction. This keeps short replies such as
+“Option B” interpretable through `goal_history`. Older records without question
+context remain readable; missing text is not reconstructed or invented.
+
 In CLI supervision, stdin text answers the current pending question, or records
 a correction if none is pending. `/accept CANDIDATE_ID` explicitly accepts a
 candidate; ordinary text such as “yes” is an answer, not acceptance. Text at a
@@ -111,7 +116,7 @@ a retained execution. Questions survive supervisor restart with zero model calls
 while waiting. An answer resumes the same child; old evidence becomes historical
 and current sources must be reread before relying on them.
 
-The [actual CLI controls (private source)](https://github.com/noxstellar/spine/blob/bb5310820bd657487a27329039a49e592a8acaf7/rust/proofs/2026-11-17-native-consumer-goals/README.md) cover
+The [actual CLI controls (private source)](https://github.com/noxstellar/spine/blob/39ff6d955eeaaf881b51ac2966fcabd4e846ffc0/rust/proofs/2026-11-17-native-consumer-goals/README.md) cover
 restart, correction, inspection and explicit rebase. Parent assessment remains
 fallible model judgment. Independent review and the adaptive default are still
 under development; neither can substitute for final goal acceptance.
@@ -363,7 +368,7 @@ and directory identities; copied/imported directories or legacy receipts cannot
 authorize this path. The ordinary state reader stays limited to 32 MiB, while
 the explicit recovery may read the exact larger state approved in the request.
 Reports and journals keep their existing bounds. Missing state, uncertain effects
-or incomplete cleanup remain fenced. See the [closed-active recovery controls (private source)](https://github.com/noxstellar/spine/blob/bb5310820bd657487a27329039a49e592a8acaf7/rust/proofs/2026-11-17-closed-active-recovery/README.md).
+or incomplete cleanup remain fenced. See the [closed-active recovery controls (private source)](https://github.com/noxstellar/spine/blob/39ff6d955eeaaf881b51ac2966fcabd4e846ffc0/rust/proofs/2026-11-17-closed-active-recovery/README.md).
 
 The captured `goal_history` schema then additionally offers:
 
@@ -376,7 +381,7 @@ observations, `next_offset` within a page and `next_page` between archive pages.
 `view=full` retains the complete public projection. Retrieval verifies the
 captured hash roots and uses bounded index/page reads; it does not make old
 checks fresh. These fields are absent from ordinary goals without an archive.
-See the [scoped qualification (private source)](https://github.com/noxstellar/spine/blob/bb5310820bd657487a27329039a49e592a8acaf7/rust/proofs/2026-11-17-execution-supersession/README.md).
+See the [scoped qualification (private source)](https://github.com/noxstellar/spine/blob/39ff6d955eeaaf881b51ac2966fcabd4e846ffc0/rust/proofs/2026-11-17-execution-supersession/README.md).
 
 After three settled periods with identical declared progress, no tool/child work
 and unchanged input, the host asks what should change. It records `blocked` while
@@ -390,7 +395,7 @@ and `spine trace REPORT.trace.jsonl --html review.html`. Each period gets its ow
 trace. Details and coverage limits are in [tracing](TRACING.md). Scripted lifecycle
 controls do not prove week-scale model competence or superiority over other agents.
 
-One [real Kimi goal qualification (private source)](https://github.com/noxstellar/spine/blob/bb5310820bd657487a27329039a49e592a8acaf7/rust/proofs/2026-11-16-kimi-goal-live/README.md)
+One [real Kimi goal qualification (private source)](https://github.com/noxstellar/spine/blob/39ff6d955eeaaf881b51ac2966fcabd4e846ffc0/rust/proofs/2026-11-16-kimi-goal-live/README.md)
 passes three explicitly instructed work periods, a question wait with zero model
 calls, automatic resumption after the answer and independently accepted artifacts.
 It used 10 requests and 57.485 seconds. This small lifecycle observation does not

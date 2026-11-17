@@ -37,6 +37,13 @@ efficacy are still being qualified. The experimental assignment encoder targets
 repeated prompt text, with live token and speed gains unproven. Both switches and
 their defaults are documented in [configuration](CONFIGURATION.md).
 
+A small frozen Kimi reviewer study caught four seeded incorrect candidates and
+supported four correct ones, including changed evidence and a misleading source
+note. Independent grading confirmed useful correction guidance. It used eight
+calls, 13,970 input / 5,952 output tokens and 64.567 seconds summed request time.
+This is unreleased factual-review evidence; actual repairs and whole-task
+reliability gains still need measurement. Verification remains opt-in.
+
 ## Why use Spine?
 
 **Choose Spine when you want a recursive agent inside your own application or
