@@ -86,6 +86,14 @@ the child stays `awaiting review`. The tool result does not change that label or
 create a verified-completion receipt. Only a later typed assessment settles the
 candidate; inspection, repair and acceptance remain distinct steps.
 
+With opt-in [native adaptive verification](GOALS.md#adaptive-verification-03-development),
+`independent_review` records bind task, candidate and review IDs. The graph can
+show `awaiting independent review`, `model-supported`, `prior model support reused`,
+`repair requested` or `awaiting input`. These are typed fallible-review states;
+`model-supported` is not machine-verified or operator-accepted. Inspect the period
+report and request journal for accounting: a review claim or trace event alone
+does not prove that HTTP was sent.
+
 The recorder emits `step_started` before entering a runtime step; this is not
 proof that a provider request or tool action has already been dispatched. Other
 records are appended at observed step boundaries. A live read shows the complete
@@ -118,6 +126,6 @@ detect arbitrary secrets embedded in prose or source**. Treat detailed traces
 like task data. The recorder never reads raw provider bodies, headers or private
 reasoning. No tracing mode exposes these files as model tools.
 
-See [the local verification record (private source)](https://github.com/noxstellar/spine/blob/39ff6d955eeaaf881b51ac2966fcabd4e846ffc0/rust/proofs/2026-11-16-execution-tracing/README.md)
+See [the local verification record (private source)](https://github.com/noxstellar/spine/blob/20b4fc38c71ef78ad087e34c37c86d0545dbada8/rust/proofs/2026-11-16-execution-tracing/README.md)
 for checks and scope. These diagnostics help investigate behavior; they do not
 by themselves establish improved model quality or peer parity.

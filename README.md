@@ -32,8 +32,12 @@ there is no Spine-branded editor extension or completed GUI qualification yet.
 
 Development also includes opt-in consumer assessment: a parent can reject a
 child result and resume that child for correction before using its output.
-It is separate from independent acceptance; durable review carryover and live
-efficacy are still being qualified. The experimental assignment encoder targets
+Development also adds [native adaptive goal review](GOALS.md#adaptive-verification-03-development):
+optional child escalation and required judgment of complete goal candidates.
+Its integrated controls pass child repair, question/restart and short-answer
+resumption. It is unreleased, remains off by default and still needs live task
+efficacy evaluation; see [the measured scope](GOALS.md#adaptive-verification-03-development).
+The experimental assignment encoder targets
 repeated prompt text, with live token and speed gains unproven. Both switches and
 their defaults are documented in [configuration](CONFIGURATION.md).
 

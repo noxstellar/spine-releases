@@ -7,13 +7,13 @@ stdin/stdout. It uses the official Rust SDK pinned to `5.3.0` and the same
 execution core, provider budgets, task policies and MCP adapters as the CLI.
 The published package includes ACP and embedded project memory. Protocol and
 lifecycle controls, together with the separate two-task AUTO qualification, are
-recorded in [the integration release proof (private source)](https://github.com/noxstellar/spine/blob/39ff6d955eeaaf881b51ac2966fcabd4e846ffc0/rust/proofs/2026-11-15-v0.2-integration/README.md).
+recorded in [the integration release proof (private source)](https://github.com/noxstellar/spine/blob/20b4fc38c71ef78ad087e34c37c86d0545dbada8/rust/proofs/2026-11-15-v0.2-integration/README.md).
 Those two AUTO coding passes do not establish matched AUTO parity or broad reliability.
-The separately frozen [general-purpose study (private source)](https://github.com/noxstellar/spine/blob/39ff6d955eeaaf881b51ac2966fcabd4e846ffc0/rust/proofs/2026-11-15-general-tasks/README.md)
+The separately frozen [general-purpose study (private source)](https://github.com/noxstellar/spine/blob/20b4fc38c71ef78ad087e34c37c86d0545dbada8/rust/proofs/2026-11-15-general-tasks/README.md)
 adds research/operations CLI evidence with explicit benchmark limits; it is not a
 paid ACP trial.
 
-Development toward 0.3 is tracked in [the next release plan (private source)](https://github.com/noxstellar/spine/blob/39ff6d955eeaaf881b51ac2966fcabd4e846ffc0/rust/NEXT_RELEASE_PLAN.md).
+Development toward 0.3 is tracked in [the next release plan (private source)](https://github.com/noxstellar/spine/blob/20b4fc38c71ef78ad087e34c37c86d0545dbada8/rust/NEXT_RELEASE_PLAN.md).
 The unreleased source now preserves a genuine model-declared root blocker as
 `root_blocker: {task_id, reason}` in the private execution report and as bounded
 text in the ACP final answer. That answer survives session reload and appears in
@@ -30,6 +30,13 @@ The unreleased host also accepts `SPINE_TRACE=1` or `details` in its environment
 for [optional local execution traces](TRACING.md). Each invocation writes beside
 its private report; `spine trace` reviews the graph and timeline offline without
 adding protocol messages to stdout.
+
+The experimental [adaptive review setting](CONFIGURATION.md#native-adaptive-verification-03-development)
+is currently restricted to native durable CLI goals. The ACP backend supplies a
+session/client-tool wrapper, so it does not satisfy that native-only admission
+contract, even with no external MCP server. This setting does not enable adaptive
+review for ordinary ACP turns or arbitrary supplied tools; the existing ACP
+capabilities and default verification mode are unchanged.
 
 ## Start the agent
 

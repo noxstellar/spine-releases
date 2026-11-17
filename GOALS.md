@@ -3,7 +3,7 @@
 > **Version scope:** This public copy preserves the guide’s release and development labels. Features marked unreleased are not available in an older installed binary. Private-source links require repository access.
 
 This interface is under qualification. Public v0.2.1 does not include it.
-See [the release plan (private source)](https://github.com/noxstellar/spine/blob/39ff6d955eeaaf881b51ac2966fcabd4e846ffc0/rust/NEXT_RELEASE_PLAN.md) for remaining gates and the
+See [the release plan (private source)](https://github.com/noxstellar/spine/blob/20b4fc38c71ef78ad087e34c37c86d0545dbada8/rust/NEXT_RELEASE_PLAN.md) for remaining gates and the
 [configuration reference](CONFIGURATION.md) for all defaults and examples.
 
 A goal records its objective and acceptance requirements **before any model
@@ -116,10 +116,43 @@ a retained execution. Questions survive supervisor restart with zero model calls
 while waiting. An answer resumes the same child; old evidence becomes historical
 and current sources must be reread before relying on them.
 
-The [actual CLI controls (private source)](https://github.com/noxstellar/spine/blob/39ff6d955eeaaf881b51ac2966fcabd4e846ffc0/rust/proofs/2026-11-17-native-consumer-goals/README.md) cover
+The [actual CLI controls (private source)](https://github.com/noxstellar/spine/blob/20b4fc38c71ef78ad087e34c37c86d0545dbada8/rust/proofs/2026-11-17-native-consumer-goals/README.md) cover
 restart, correction, inspection and explicit rebase. Parent assessment remains
-fallible model judgment. Independent review and the adaptive default are still
-under development; neither can substitute for final goal acceptance.
+fallible model judgment. The separate adaptive mode below adds independent review;
+neither assessment nor review substitutes for final goal acceptance.
+
+### Adaptive verification (0.3 development)
+
+For a native macOS/Linux development CLI, enable independent review alongside
+parent assessment:
+
+```sh
+SPINE_NATIVE_TOOLS=1 SPINE_RETURN_VERIFICATION=adaptive \
+  SPINE_REVIEW_MAX_OUTPUT_TOKENS=1024 spine goal run GOAL_ID
+```
+
+This is opt-in and unreleased. It has the same built-in-only,
+`require_acceptance` and `goal_history` restrictions described above. Keep the
+recorded model and tool profile when resuming. See [configuration and review costs](CONFIGURATION.md#native-adaptive-verification-03-development).
+
+A parent may escalate a pending child to independent review, inspect the cited
+artifacts and repair that same child before consuming its result. Complete goal
+candidates require a separate judgment. Valid unfinished period yields bypass
+whole-goal review; they remain unfinished work. Reviews consume the existing
+allowance, and unchanged attempted judgments are not automatically retried.
+
+An unresolved review question uses the ordinary durable question/answer path.
+While waiting, the supervisor spends no model calls; an exact accepted answer
+resumes work and requires the current scope and evidence to be checked again.
+A positive model judgment still leads to the goal’s configured acceptance checks
+or explicit `goal accept` decision. It cannot establish every natural-language
+requirement by itself. The default remains `off` pending efficacy evaluation.
+
+The [integrated native adaptive controls (private source)](https://github.com/noxstellar/spine/blob/20b4fc38c71ef78ad087e34c37c86d0545dbada8/rust/proofs/2026-11-17-native-adaptive-goals/README.md)
+pass 1,062 default / 1,591 all-feature test invocations, strict Clippy and formatting.
+An actual CLI control uses 13 scripted requests and three file reads to exercise
+independent child review, same-child repair, root uncertainty, restart and short-answer
+resumption. This establishes lifecycle behavior, not live model repair efficacy.
 
 ### Period and lifetime settings
 
@@ -368,7 +401,7 @@ and directory identities; copied/imported directories or legacy receipts cannot
 authorize this path. The ordinary state reader stays limited to 32 MiB, while
 the explicit recovery may read the exact larger state approved in the request.
 Reports and journals keep their existing bounds. Missing state, uncertain effects
-or incomplete cleanup remain fenced. See the [closed-active recovery controls (private source)](https://github.com/noxstellar/spine/blob/39ff6d955eeaaf881b51ac2966fcabd4e846ffc0/rust/proofs/2026-11-17-closed-active-recovery/README.md).
+or incomplete cleanup remain fenced. See the [closed-active recovery controls (private source)](https://github.com/noxstellar/spine/blob/20b4fc38c71ef78ad087e34c37c86d0545dbada8/rust/proofs/2026-11-17-closed-active-recovery/README.md).
 
 The captured `goal_history` schema then additionally offers:
 
@@ -381,7 +414,7 @@ observations, `next_offset` within a page and `next_page` between archive pages.
 `view=full` retains the complete public projection. Retrieval verifies the
 captured hash roots and uses bounded index/page reads; it does not make old
 checks fresh. These fields are absent from ordinary goals without an archive.
-See the [scoped qualification (private source)](https://github.com/noxstellar/spine/blob/39ff6d955eeaaf881b51ac2966fcabd4e846ffc0/rust/proofs/2026-11-17-execution-supersession/README.md).
+See the [scoped qualification (private source)](https://github.com/noxstellar/spine/blob/20b4fc38c71ef78ad087e34c37c86d0545dbada8/rust/proofs/2026-11-17-execution-supersession/README.md).
 
 After three settled periods with identical declared progress, no tool/child work
 and unchanged input, the host asks what should change. It records `blocked` while
@@ -395,7 +428,7 @@ and `spine trace REPORT.trace.jsonl --html review.html`. Each period gets its ow
 trace. Details and coverage limits are in [tracing](TRACING.md). Scripted lifecycle
 controls do not prove week-scale model competence or superiority over other agents.
 
-One [real Kimi goal qualification (private source)](https://github.com/noxstellar/spine/blob/39ff6d955eeaaf881b51ac2966fcabd4e846ffc0/rust/proofs/2026-11-16-kimi-goal-live/README.md)
+One [real Kimi goal qualification (private source)](https://github.com/noxstellar/spine/blob/20b4fc38c71ef78ad087e34c37c86d0545dbada8/rust/proofs/2026-11-16-kimi-goal-live/README.md)
 passes three explicitly instructed work periods, a question wait with zero model
 calls, automatic resumption after the answer and independently accepted artifacts.
 It used 10 requests and 57.485 seconds. This small lifecycle observation does not

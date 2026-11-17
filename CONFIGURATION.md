@@ -3,7 +3,7 @@
 > **Version scope:** This public copy preserves the guide’s release and development labels. Features marked unreleased are not available in an older installed binary. Private-source links require repository access.
 
 This reference covers the installed launcher and Rust host as inspected on
-16 November 2026. **The published release is v0.2.1.** Sections marked **0.3
+17 November 2026. **The published release is v0.2.1.** Sections marked **0.3
 development** describe unreleased work under qualification, not capabilities
 already delivered by the public installer. Check your binary with `spine --version`.
 
@@ -305,7 +305,8 @@ Published studies qualify exact configurations, not every policy combination.
 | --- | --- | --- |
 | `SPINE_AUTO_WORKFLOW` | `agent` | AUTO policy. Other values: `adaptive`, `producer_handoff`, `implementation_review_handoff`, `test_first_handoff`, `staged_handoff`, `implementation_test_handoff`, `obligation_test_handoff`, `evidenced_test_handoff`, `direct_test_handoff`. Other modes keep their own policy. |
 | `SPINE_VERIFICATION_POLICY` | Unset | JSON `{ "id": "…", "checks": [{"name":"…","arguments":{}}], "effect_tools": ["…"] }`. Exact caller-owned ToolCalls define observed checks; no semantic correctness oracle. Native tools required. |
-| `SPINE_RETURN_VERIFICATION` | `off` | **0.3 development, experimental:** `consumer` holds each nonroot completion for parent assessment. `inspect` can read through an explicitly admitted host capability while the candidate remains pending; acceptance can include one ordinary next action. Repair reuses the child and spent counters; `ask` retains a candidate-bound question without polling. Shares ordinary model/request/tool limits. Model review is fallible and does not establish whole-goal acceptance. Unsupported model profiles and mode changes on resume reject before dispatch. |
+| `SPINE_RETURN_VERIFICATION` | `off` | **0.3 development, experimental:** `consumer` holds recursive child results for parent inspection, repair, questions and acceptance as input. `adaptive` additionally permits child escalation to a separate reviewer and requires a separate judgment for complete goal candidates. Adaptive is restricted to the native durable CLI profile below. Both share ordinary limits; judgment is fallible and never replaces goal acceptance. |
+| `SPINE_REVIEW_MAX_OUTPUT_TOKENS` | `1024` | **0.3 development:** integer `1`–`2048`, for adaptive independent-review responses. The actual cap is the smaller of this setting and the selected role model’s output cap; ordinary account limits still apply. |
 | `SPINE_PUBLIC_CHECK_SET` | Unset | JSON with optional `preparation` ToolCalls and `author_preparation` check indices; check calls come from the verification policy. Exposes the configured aggregate action. |
 | `SPINE_CALLER_RESERVE` | Applicable default: tools `min(max_tools/3,8)`, decisions `min(max_steps/4,6)` | JSON with exactly integer `tools` and `decisions`; supported by AUTO adaptive/producer/implementation-review policies. Explicit reserve must leave producer capacity and fund checks plus delivery. |
 | `SPINE_DIRECT_CALLER_TOOL_RESERVE` | `min(max_tools/3,8)` | Positive explicit tool reserve only for `direct_test_handoff` with a native public check set; must fit its configured checks and leave producer capacity. |
@@ -328,27 +329,27 @@ policies; historical staged policies and the native public-record envelope are
 not supported. When public work records are enabled, use their `assistant_text`
 transport. Native Chat Completions, structured decisions and Responses retain
 their existing provider requirements. This first consumer mode does not add an
-independent root reviewer. The [adaptive default (private source)](https://github.com/noxstellar/spine/blob/39ff6d955eeaaf881b51ac2966fcabd4e846ffc0/rust/VERIFICATION_DESIGN.md) still
+independent root reviewer. The [adaptive default (private source)](https://github.com/noxstellar/spine/blob/20b4fc38c71ef78ad087e34c37c86d0545dbada8/rust/VERIFICATION_DESIGN.md) still
 requires efficacy, overhead and durable-state qualification.
 
 The development SDK separately exposes `RootReviewConfig` and `step_reviewed`
 with an explicit trusted evidence policy. Its configured output ceiling is
 1–2,048 tokens. It preserves review attempts and typed final audit records; see
-the [SDK controls and limits (private source)](https://github.com/noxstellar/spine/blob/39ff6d955eeaaf881b51ac2966fcabd4e846ffc0/rust/proofs/2026-11-17-independent-root-review/README.md).
-This interface has no CLI/environment setting and is not yet activated in the
-durable host. The proposed `auto` setting below remains a design, not an accepted
-configuration value.
+the [SDK controls and limits (private source)](https://github.com/noxstellar/spine/blob/20b4fc38c71ef78ad087e34c37c86d0545dbada8/rust/proofs/2026-11-17-independent-root-review/README.md).
+This low-level SDK interface is distinct from the native adaptive goal mode below.
+`auto` remains an unaccepted value for `SPINE_RETURN_VERIFICATION`; it is not a
+shortcut for adaptive review.
 
 The current development profile is `consumer_v3`. It retains the bounded questions
 (at most 8,192 UTF-8 bytes) introduced in `consumer_v2`. The runtime exposes a typed suspension and saves the unresolved child;
 repeated suspended steps consume no model, context or tool calls and no active
 execution time. An accepted answer is trusted steering, not permission to accept
-the old result. The [native durable profile (private source)](https://github.com/noxstellar/spine/blob/39ff6d955eeaaf881b51ac2966fcabd4e846ffc0/rust/proofs/2026-11-17-native-consumer-goals/README.md)
+the old result. The [native durable profile (private source)](https://github.com/noxstellar/spine/blob/20b4fc38c71ef78ad087e34c37c86d0545dbada8/rust/proofs/2026-11-17-native-consumer-goals/README.md)
 now preserves this behavior across work periods and supervisor restarts.
 Earlier `consumer_v1` and `consumer_v2` checkpoints retain their original executable/profile;
 changing the interface does not authorize resetting their accounting.
 
-For consumer mode with the built-in native workspace tools, the host adds
+For consumer or adaptive mode with built-in native workspace tools, the host adds
 `workspace.inspect_artifact` with arguments `{"path":"relative/file.txt"}`.
 The parent may select it through the assessment's `inspect` disposition before
 accepting the child. This consumes one ordinary model decision and one tool call;
@@ -401,6 +402,36 @@ model/endpoint/effort/context/tool/profile settings reject before escrow; do not
 silently change a retained execution's profile. `SPINE_VERIFICATION_POLICY` and
 `SPINE_PUBLIC_CHECK_SET` remain unsupported for goals. Ordinary runs and existing
 external integrations retain their documented modes. See [goal examples](GOALS.md#consumer-verification-03-development).
+
+### Native adaptive verification (0.3 development)
+
+`SPINE_RETURN_VERIFICATION=adaptive` is an experimental native durable-goal
+profile for macOS/Linux development builds. **The default remains `off`; v0.2.1
+is unchanged.** Efficacy and overhead must be measured before a default change.
+Use built-in native tools, `require_acceptance`, and `goal_history` in any explicit
+root tool scope. Custom native servers, external MCP/client tools, ordinary
+standalone runs and the current ACP session-tool wrapper are outside this profile.
+
+Parent assessment still holds a child pending. The parent can inspect, repair,
+ask a question or request independent review; there is no mandatory extra reviewer
+for every child. A complete goal candidate requires independent judgment before
+it reaches the existing goal acceptance checks or operator decision. Valid
+unfinished period results and waits do not request whole-goal review.
+
+Review calls use the same request/byte/output reservations and runtime step limits
+as the work. Child escalation uses the Caller role (`SPINE_CALLER_*`, falling back
+to primary); whole-goal review uses primary. The configured review output ceiling
+is further limited by that role model’s cap. Local validation rereads the same
+admitted full artifact snapshots and reports its costs separately; it grants no
+extra model or tool allowance.
+
+The retained policy binds the actual sender’s API, endpoint, model, effort,
+role settings and caps. Changing them cannot silently reuse old review history or
+buy a new attempt for unchanged work. Resume with the recorded profile; failures,
+repairs and fresh work periods do not reset spent allowance. Evidence changes and
+accepted corrections require fresh validation. A supported judgment is a fallible
+model observation, not a machine check or final goal acceptance. See
+[the goal workflow](GOALS.md#adaptive-verification-03-development).
 
 ## Durable goals: optional overall limits (0.3 development)
 
@@ -559,7 +590,7 @@ live/uncertain work, legacy receipts and inode-changing imports reject. Reports
 and journals retain their fixed bounds. Supersession retains obligations,
 effects and spending as unfinished history, settles any previously uncommitted
 consumption once, and charges a new root normally. The native-only consumer
-profile now passes [integrated restart and recovery controls (private source)](https://github.com/noxstellar/spine/blob/39ff6d955eeaaf881b51ac2966fcabd4e846ffc0/rust/proofs/2026-11-17-native-consumer-goals/README.md).
+profile now passes [integrated restart and recovery controls (private source)](https://github.com/noxstellar/spine/blob/20b4fc38c71ef78ad087e34c37c86d0545dbada8/rust/proofs/2026-11-17-native-consumer-goals/README.md).
 
 ## ACP, MCP, sessions and memory
 
