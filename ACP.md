@@ -7,13 +7,13 @@ stdin/stdout. It uses the official Rust SDK pinned to `5.3.0` and the same
 execution core, provider budgets, task policies and MCP adapters as the CLI.
 The published package includes ACP and embedded project memory. Protocol and
 lifecycle controls, together with the separate two-task AUTO qualification, are
-recorded in [the integration release proof (private source)](https://github.com/noxstellar/spine/blob/c23950e94493efc04894482653add85a66301de1/rust/proofs/2026-11-15-v0.2-integration/README.md).
+recorded in [the integration release proof (private source)](https://github.com/noxstellar/spine/blob/93baea8d83068ce25472a83518b93045304b6d49/rust/proofs/2026-11-15-v0.2-integration/README.md).
 Those two AUTO coding passes do not establish matched AUTO parity or broad reliability.
-The separately frozen [general-purpose study (private source)](https://github.com/noxstellar/spine/blob/c23950e94493efc04894482653add85a66301de1/rust/proofs/2026-11-15-general-tasks/README.md)
+The separately frozen [general-purpose study (private source)](https://github.com/noxstellar/spine/blob/93baea8d83068ce25472a83518b93045304b6d49/rust/proofs/2026-11-15-general-tasks/README.md)
 adds research/operations CLI evidence with explicit benchmark limits; it is not a
 paid ACP trial.
 
-Development toward 0.3 is tracked in [the next release plan (private source)](https://github.com/noxstellar/spine/blob/c23950e94493efc04894482653add85a66301de1/rust/NEXT_RELEASE_PLAN.md).
+Development toward 0.3 is tracked in [the next release plan (private source)](https://github.com/noxstellar/spine/blob/93baea8d83068ce25472a83518b93045304b6d49/rust/NEXT_RELEASE_PLAN.md).
 The unreleased source now preserves a genuine model-declared root blocker as
 `root_blocker: {task_id, reason}` in the private execution report and as bounded
 text in the ACP final answer. That answer survives session reload and appears in
@@ -34,12 +34,17 @@ adding protocol messages to stdout.
 Experimental `SPINE_RETURN_VERIFICATION=consumer` and `adaptive` also support
 native durable goals attached through `_spine/goal`. This profile requires
 built-in native tools, no custom `SPINE_TOOL_SERVER`, no external MCP servers,
-and all ACP client filesystem and terminal capabilities disabled. It does not
-enable assessed execution for ordinary unattached ACP turns or client-provided
-tools. The stored goal must use `require_acceptance`; an explicit root tool
+and the concrete ACP session client. Configured client file/terminal capabilities
+can be enabled; their complete catalog is bound to the retained execution. This
+does not enable assessed execution for ordinary unattached ACP turns or arbitrary
+trait-supplied providers. The stored goal must use `require_acceptance`; an explicit root tool
 scope must include both `goal_history` and `session.history`.
 
-The client still receives public progress and permission requests. In particular,
+Client read/write/terminal actions use the existing exact permission and cleanup
+paths. Their returned data has no inspection authority: native adaptive evidence
+refers to current persisted local files, not unsaved editor buffers or remote
+client state. The client still receives public progress and permission requests.
+In particular,
 `workspace.inspect_artifact` requires the client's exact approval. Inspection
 uses the native workspace reader, not a client filesystem operation. Parent
 assessment and independent review retain the same goal account and acceptance
@@ -54,15 +59,15 @@ view. New authoritative corrections and answered questions belong to the goal's
 input history, retrievable through `goal_history`. Session history is context
 data; its tool name or contents cannot confer an evidence-inspection grant.
 
-A changed or missing prefix, different session, newly enabled client I/O, added
+A changed or missing prefix, different session, changed client capability/catalog, added
 external server, or missing required history tool rejects before a prompt is
 accepted as a goal correction or a new work period is reserved. Migrating a
 retained execution requires an explicit eligible `goal rebase`, preserving
-spend and review consumption. Rebase does not authorize client I/O or external
-providers. See [the exact rebase restrictions](GOALS.md#explicitly-supersede-a-retained-execution-03-development).
+spend and review consumption. Rebase does not grant new tool permissions or authorize external providers. See [the exact rebase restrictions](GOALS.md#explicitly-supersede-a-retained-execution-03-development).
 
-The [native ACP lifecycle control (private source)](https://github.com/noxstellar/spine/blob/c23950e94493efc04894482653add85a66301de1/rust/proofs/2026-11-17-acp-native-adaptive/README.md)
-qualifies this profile with scripted local responses. No real-model efficacy or
+The [concrete-client ACP lifecycle control (private source)](https://github.com/noxstellar/spine/blob/93baea8d83068ce25472a83518b93045304b6d49/rust/proofs/2026-11-17-acp-client-adaptive/README.md)
+qualifies this profile with scripted local responses, actual file actions and
+a bounded terminal child. No real-model efficacy or
 editor GUI coverage follows from that check.
 
 ## Start the agent

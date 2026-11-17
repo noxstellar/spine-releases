@@ -100,3 +100,19 @@ question/answer and trace views. The runtime, credentials and recursive executio
 remain shared with the CLI. Marketplace publication and GUI qualification are
 separate work from the currently supported protocol. The full wire contract is
 documented in [ACP integration](ACP.md).
+
+## Native assessed goals (0.3 development)
+
+The experimental native consumer/adaptive goal profile also supports the concrete
+ACP client's configured read/write/terminal capabilities. It binds the enabled
+catalog to the retained session, keeps per-period permissions and terminal cleanup,
+and uses the native reader for current persisted-file evidence. Client outputs,
+unsaved buffers and remote editor state do not become inspected evidence.
+Changing capabilities during retained work requires explicit eligible recovery.
+Built-in native tools and the owned history tools remain required; arbitrary
+external MCP/custom providers are outside this profile. See [native assessed goals](GOALS.md#native-assessed-goals-through-acp).
+
+These are protocol/compiled-binary controls. A particular editor still needs UI
+support for `_spine/goal` questions, answers and acceptance before this is a
+qualified end-to-end editor workflow. The ordinary editor configuration examples
+above retain their own supported scope.
