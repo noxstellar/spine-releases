@@ -3,14 +3,16 @@
 > **Version scope:** This public copy preserves the guide’s release and development labels. Features marked unreleased are not available in an older installed binary. Private-source links require repository access.
 
 This interface is under qualification. Public v0.2.1 does not include it.
-See [the release plan (private source)](https://github.com/noxstellar/spine/blob/26b1cbc1a8ef188656eafa66c822416d444f90b8/rust/NEXT_RELEASE_PLAN.md) for remaining gates and the
+See [the release plan (private source)](https://github.com/noxstellar/spine/blob/bb5310820bd657487a27329039a49e592a8acaf7/rust/NEXT_RELEASE_PLAN.md) for remaining gates and the
 [configuration reference](CONFIGURATION.md) for all defaults and examples.
 
 A goal records its objective and acceptance requirements **before any model
 work**, plus user corrections, retained reports and an optional lifetime budget.
 No overall turn, period or elapsed-calendar-time cap is imposed by default.
-Each work period uses the ordinary recursive execution core. Subsequent periods
-replan from retained public state; they do not replay an interrupted task stack.
+Each work period uses the ordinary recursive execution core. The default path
+replans from retained public state. The opt-in native consumer profile retains
+its exact safely closed recursive state across periods. Uncertain interrupted
+work is never automatically replayed.
 Ordinary `spine run` incurs no goal-store or mandatory planner calls.
 
 The model finishes a period with typed progress: `continue`, `needs_input`,
@@ -91,6 +93,30 @@ success, machine uptime or provider availability; unavailable dependencies remai
 visible as unfinished work. Calendar waiting does not spend active-work time.
 
 ## Limits and accounting
+
+### Consumer verification (0.3 development)
+
+With a development build, enable parent assessment and retained same-child repair:
+
+```sh
+SPINE_NATIVE_TOOLS=1 SPINE_RETURN_VERIFICATION=consumer spine goal run GOAL_ID
+```
+
+This opt-in profile requires built-in native tools, no custom native server or
+external/client tool providers, and the `require_acceptance` completion policy.
+Include `goal_history` if the goal declares an explicit tool scope. Configuration
+and source-profile changes are checked before a period is reserved. Keep the
+original model, endpoint, effort, context and tool configuration when continuing
+a retained execution. Questions survive supervisor restart with zero model calls
+while waiting. An answer resumes the same child; old evidence becomes historical
+and current sources must be reread before relying on them.
+
+The [actual CLI controls (private source)](https://github.com/noxstellar/spine/blob/bb5310820bd657487a27329039a49e592a8acaf7/rust/proofs/2026-11-17-native-consumer-goals/README.md) cover
+restart, correction, inspection and explicit rebase. Parent assessment remains
+fallible model judgment. Independent review and the adaptive default are still
+under development; neither can substitute for final goal acceptance.
+
+### Period and lifetime settings
 
 The optional `mode` is `auto` (default), `direct` or `recursive`. `allowed_tools`
 restricts exact tool names and is inherited by descendants. Model/provider
@@ -311,10 +337,10 @@ attention state and awaits resolution instead of marking success.
 
 ### Explicitly supersede a retained execution (0.3 development)
 
-An already-settled unfinished recursive execution can be archived explicitly
-when its retained tree needs replacement. Consumer durable activation remains
-gated while oversized post-dispatch recovery and restart checks are completed.
-This command currently rejects active or uncertain periods.
+An unfinished recursive execution can be archived explicitly when its retained
+tree needs replacement. This admits an already-settled source or an active
+period with verified closed resources and unchanged original ownership. The
+native consumer profile supports this path; live or uncertain periods reject.
 
 ```sh
 # Prepare exact source hashes, size, current input head and read allowance.
@@ -331,6 +357,14 @@ question and observed effects are archived as `superseded_unfinished`; none is
 accepted or automatically replayed. The replacement root consumes ordinary
 remaining task allowance. A repeated identical committed request is idempotent.
 
+For a closed active source, recovery settles its previously uncommitted observed
+consumption exactly once. Its closure receipt must bind the original Unix lock
+and directory identities; copied/imported directories or legacy receipts cannot
+authorize this path. The ordinary state reader stays limited to 32 MiB, while
+the explicit recovery may read the exact larger state approved in the request.
+Reports and journals keep their existing bounds. Missing state, uncertain effects
+or incomplete cleanup remain fenced. See the [closed-active recovery controls (private source)](https://github.com/noxstellar/spine/blob/bb5310820bd657487a27329039a49e592a8acaf7/rust/proofs/2026-11-17-closed-active-recovery/README.md).
+
 The captured `goal_history` schema then additionally offers:
 
 ```json
@@ -342,7 +376,7 @@ observations, `next_offset` within a page and `next_page` between archive pages.
 `view=full` retains the complete public projection. Retrieval verifies the
 captured hash roots and uses bounded index/page reads; it does not make old
 checks fresh. These fields are absent from ordinary goals without an archive.
-See the [scoped qualification (private source)](https://github.com/noxstellar/spine/blob/26b1cbc1a8ef188656eafa66c822416d444f90b8/rust/proofs/2026-11-17-execution-supersession/README.md).
+See the [scoped qualification (private source)](https://github.com/noxstellar/spine/blob/bb5310820bd657487a27329039a49e592a8acaf7/rust/proofs/2026-11-17-execution-supersession/README.md).
 
 After three settled periods with identical declared progress, no tool/child work
 and unchanged input, the host asks what should change. It records `blocked` while
@@ -356,7 +390,7 @@ and `spine trace REPORT.trace.jsonl --html review.html`. Each period gets its ow
 trace. Details and coverage limits are in [tracing](TRACING.md). Scripted lifecycle
 controls do not prove week-scale model competence or superiority over other agents.
 
-One [real Kimi goal qualification (private source)](https://github.com/noxstellar/spine/blob/26b1cbc1a8ef188656eafa66c822416d444f90b8/rust/proofs/2026-11-16-kimi-goal-live/README.md)
+One [real Kimi goal qualification (private source)](https://github.com/noxstellar/spine/blob/bb5310820bd657487a27329039a49e592a8acaf7/rust/proofs/2026-11-16-kimi-goal-live/README.md)
 passes three explicitly instructed work periods, a question wait with zero model
 calls, automatic resumption after the answer and independently accepted artifacts.
 It used 10 requests and 57.485 seconds. This small lifecycle observation does not

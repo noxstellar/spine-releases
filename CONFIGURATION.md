@@ -328,15 +328,23 @@ policies; historical staged policies and the native public-record envelope are
 not supported. When public work records are enabled, use their `assistant_text`
 transport. Native Chat Completions, structured decisions and Responses retain
 their existing provider requirements. This first consumer mode does not add an
-independent root reviewer. The [adaptive default (private source)](https://github.com/noxstellar/spine/blob/26b1cbc1a8ef188656eafa66c822416d444f90b8/rust/VERIFICATION_DESIGN.md) still
+independent root reviewer. The [adaptive default (private source)](https://github.com/noxstellar/spine/blob/bb5310820bd657487a27329039a49e592a8acaf7/rust/VERIFICATION_DESIGN.md) still
 requires efficacy, overhead and durable-state qualification.
+
+The development SDK separately exposes `RootReviewConfig` and `step_reviewed`
+with an explicit trusted evidence policy. Its configured output ceiling is
+1–2,048 tokens. It preserves review attempts and typed final audit records; see
+the [SDK controls and limits (private source)](https://github.com/noxstellar/spine/blob/bb5310820bd657487a27329039a49e592a8acaf7/rust/proofs/2026-11-17-independent-root-review/README.md).
+This interface has no CLI/environment setting and is not yet activated in the
+durable host. The proposed `auto` setting below remains a design, not an accepted
+configuration value.
 
 The current development profile is `consumer_v3`. It retains the bounded questions
 (at most 8,192 UTF-8 bytes) introduced in `consumer_v2`. The runtime exposes a typed suspension and saves the unresolved child;
 repeated suspended steps consume no model, context or tool calls and no active
 execution time. An accepted answer is trusted steering, not permission to accept
-the old result. This does not yet provide durable-goal question handling for
-consumer mode. See the [scoped continuation checks (private source)](https://github.com/noxstellar/spine/blob/26b1cbc1a8ef188656eafa66c822416d444f90b8/rust/proofs/2026-11-16-consumer-continuation/README.md).
+the old result. The [native durable profile (private source)](https://github.com/noxstellar/spine/blob/bb5310820bd657487a27329039a49e592a8acaf7/rust/proofs/2026-11-17-native-consumer-goals/README.md)
+now preserves this behavior across work periods and supervisor restarts.
 Earlier `consumer_v1` and `consumer_v2` checkpoints retain their original executable/profile;
 changing the interface does not authorize resetting their accounting.
 
@@ -362,8 +370,8 @@ adaptive-policy and efficacy/cost qualification.
 Owned durable-goal history has a separate typed inspection route. It permits
 bounded `goal_history` reads before child acceptance, preserving captured input
 and report hashes, parent scope, permissions and normal tool charges. A client
-tool with the same name gains no such authority. Consumer durable invocation
-remains gated while recovery and actual restart qualification are completed.
+tool with the same name gains no such authority. Native consumer goals validate
+the exact model/profile and retained execution before reserving another period.
 
 The matched-evaluation launcher has an additional experimental configuration:
 `SPINE_COMMON_READ_INSPECTION` names its private capability descriptor and
@@ -384,10 +392,15 @@ or changes the default verification policy.
 SPINE_RETURN_VERIFICATION=consumer spine run /absolute/workspace 'your task'
 ```
 
-**0.3 development durable goals currently reject `SPINE_VERIFICATION_POLICY`,
-`SPINE_PUBLIC_CHECK_SET` and consumer return verification**; pending assessments
-must survive period transitions before that profile is enabled. Their separate
-stored completion policy is described next.
+**0.3 development durable consumer goals are opt-in and native-only.** Use
+`SPINE_NATIVE_TOOLS=1`, no custom `SPINE_TOOL_SERVER`, no external MCP/client tools,
+and the stored `require_acceptance` completion policy. An explicit root tool scope
+must include `goal_history`. The same-child state, pending question, original
+workspace baseline and spent counters survive safe periods and restarts. Changed
+model/endpoint/effort/context/tool/profile settings reject before escrow; do not
+silently change a retained execution's profile. `SPINE_VERIFICATION_POLICY` and
+`SPINE_PUBLIC_CHECK_SET` remain unsupported for goals. Ordinary runs and existing
+external integrations retain their documented modes. See [goal examples](GOALS.md#consumer-verification-03-development).
 
 ## Durable goals: optional overall limits (0.3 development)
 
@@ -536,13 +549,17 @@ period stays fenced for inspection. A live process or an external process
 supervisor is still needed: a configuration flag cannot keep a machine powered
 on or revive a process after the operating system exits it.
 
-Explicit `goal rebase-plan` / `goal rebase` recovery for an already-settled
-unfinished execution is documented in [goals](GOALS.md#explicitly-supersede-a-retained-execution-03-development).
+Explicit `goal rebase-plan` / `goal rebase` recovery for a settled unfinished
+execution or a verifiably closed active period is documented in [goals](GOALS.md#explicitly-supersede-a-retained-execution-03-development).
 The generated request binds the source hashes/size, current revision and input
 head. Its `max_state_bytes` allowance is explicit and local to that recovery;
-it changes no default state or lifetime limit. Active/uncertain oversized states
-still reject in this development checkpoint. Supersession retains obligations,
-effects and spending as unfinished history, and charges a new root normally.
+it changes no default state or lifetime limit. Closed active recovery additionally
+requires the original Unix ownership identities and a valid closure receipt;
+live/uncertain work, legacy receipts and inode-changing imports reject. Reports
+and journals retain their fixed bounds. Supersession retains obligations,
+effects and spending as unfinished history, settles any previously uncommitted
+consumption once, and charges a new root normally. The native-only consumer
+profile now passes [integrated restart and recovery controls (private source)](https://github.com/noxstellar/spine/blob/bb5310820bd657487a27329039a49e592a8acaf7/rust/proofs/2026-11-17-native-consumer-goals/README.md).
 
 ## ACP, MCP, sessions and memory
 
