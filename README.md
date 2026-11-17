@@ -55,6 +55,12 @@ invocations and the scripted CLI lifecycle control. The original failure remains
 recorded. These checks do not establish whole-task reliability gains or justify
 a default change; see [the current goal workflow](GOALS.md#adaptive-verification-03-development).
 
+Development also adds an opt-in [provider-failure setting](GOALS.md#provider-failures-03-development)
+that retains unfinished work and spending after a server error. Its actual CLI
+control makes zero additional requests while waiting or after restart. Existing
+operator recovery is still required; automatic provider resumption and a default
+change are not included.
+
 ## Why use Spine?
 
 **Choose Spine when you want a recursive agent inside your own application or

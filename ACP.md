@@ -7,13 +7,13 @@ stdin/stdout. It uses the official Rust SDK pinned to `5.3.0` and the same
 execution core, provider budgets, task policies and MCP adapters as the CLI.
 The published package includes ACP and embedded project memory. Protocol and
 lifecycle controls, together with the separate two-task AUTO qualification, are
-recorded in [the integration release proof (private source)](https://github.com/noxstellar/spine/blob/9bd0d24fe5da6b33941575825b0238359afdd5cb/rust/proofs/2026-11-15-v0.2-integration/README.md).
+recorded in [the integration release proof (private source)](https://github.com/noxstellar/spine/blob/74f0ba0598c7737d3142c76130109f76d993ff31/rust/proofs/2026-11-15-v0.2-integration/README.md).
 Those two AUTO coding passes do not establish matched AUTO parity or broad reliability.
-The separately frozen [general-purpose study (private source)](https://github.com/noxstellar/spine/blob/9bd0d24fe5da6b33941575825b0238359afdd5cb/rust/proofs/2026-11-15-general-tasks/README.md)
+The separately frozen [general-purpose study (private source)](https://github.com/noxstellar/spine/blob/74f0ba0598c7737d3142c76130109f76d993ff31/rust/proofs/2026-11-15-general-tasks/README.md)
 adds research/operations CLI evidence with explicit benchmark limits; it is not a
 paid ACP trial.
 
-Development toward 0.3 is tracked in [the next release plan (private source)](https://github.com/noxstellar/spine/blob/9bd0d24fe5da6b33941575825b0238359afdd5cb/rust/NEXT_RELEASE_PLAN.md).
+Development toward 0.3 is tracked in [the next release plan (private source)](https://github.com/noxstellar/spine/blob/74f0ba0598c7737d3142c76130109f76d993ff31/rust/NEXT_RELEASE_PLAN.md).
 The unreleased source now preserves a genuine model-declared root blocker as
 `root_blocker: {task_id, reason}` in the private execution report and as bounded
 text in the ACP final answer. That answer survives session reload and appears in

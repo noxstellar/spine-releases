@@ -313,6 +313,16 @@ Published studies qualify exact configurations, not every policy combination.
 | `SPINE_BUDGET_AWARE_ACTIONS` | `1` standalone; `0` reference example | `0`/`1`; constrains offered actions to remaining shared capacity. Does not replenish limits. |
 | `SPINE_VALIDATION_GUIDANCE` | `0` | `0`/`1`; guidance based on observed check state; not another model judge. |
 | `SPINE_RATE_LIMIT_RECOVERY` | `0` | `0`/`1`; recoverable HTTP 429 waits use numeric `Retry-After` up to 60 seconds, or 5 seconds if absent. Unsupported/date-form delays remain fatal. The next decision needs a new reservation under unchanged limits. |
+| `SPINE_PROVIDER_FAILURE_MODE` | `repair` | **0.3 development, experimental:** `suspend` ends the current execution on HTTP 500/502/503/504 with typed provider attention and retains charged work. It makes no retry or fallback. `repair` preserves existing server-error recovery. Successful malformed decisions, 429 and timeouts before a known server-failure status are unchanged. |
+
+For a newly configured run, `export SPINE_PROVIDER_FAILURE_MODE=suspend` prevents
+repeated decisions against an unavailable service. This setting is bound to saved
+profiles. A safely closed durable consumer/adaptive goal remains unfinished with
+provider-specific `blocked` attention, its exact state and consumed allowance.
+Show/restart do not retry it. Recovery currently uses the existing explicit
+operator correction path; there is no automatic provider-resume operation.
+A failed independent review key stays consumed. Missing provider usage is unknown,
+not zero. The default `repair` behavior and frozen trials remain unchanged.
 
 Producer, implementation-review, test-first, staged, implementation-test,
 obligation-test and evidenced-test handoffs require configured nonempty check
@@ -329,13 +339,13 @@ policies; historical staged policies and the native public-record envelope are
 not supported. When public work records are enabled, use their `assistant_text`
 transport. Native Chat Completions, structured decisions and Responses retain
 their existing provider requirements. This first consumer mode does not add an
-independent root reviewer. The [adaptive default (private source)](https://github.com/noxstellar/spine/blob/9bd0d24fe5da6b33941575825b0238359afdd5cb/rust/VERIFICATION_DESIGN.md) still
+independent root reviewer. The [adaptive default (private source)](https://github.com/noxstellar/spine/blob/74f0ba0598c7737d3142c76130109f76d993ff31/rust/VERIFICATION_DESIGN.md) still
 requires efficacy, overhead and durable-state qualification.
 
 The development SDK separately exposes `RootReviewConfig` and `step_reviewed`
 with an explicit trusted evidence policy. Its configured output ceiling is
 1–2,048 tokens. It preserves review attempts and typed final audit records; see
-the [SDK controls and limits (private source)](https://github.com/noxstellar/spine/blob/9bd0d24fe5da6b33941575825b0238359afdd5cb/rust/proofs/2026-11-17-independent-root-review/README.md).
+the [SDK controls and limits (private source)](https://github.com/noxstellar/spine/blob/74f0ba0598c7737d3142c76130109f76d993ff31/rust/proofs/2026-11-17-independent-root-review/README.md).
 This low-level SDK interface is distinct from the native adaptive goal mode below.
 `auto` remains an unaccepted value for `SPINE_RETURN_VERIFICATION`; it is not a
 shortcut for adaptive review.
@@ -344,7 +354,7 @@ The current development profile is `consumer_v3`. It retains the bounded questio
 (at most 8,192 UTF-8 bytes) introduced in `consumer_v2`. The runtime exposes a typed suspension and saves the unresolved child;
 repeated suspended steps consume no model, context or tool calls and no active
 execution time. An accepted answer is trusted steering, not permission to accept
-the old result. The [native durable profile (private source)](https://github.com/noxstellar/spine/blob/9bd0d24fe5da6b33941575825b0238359afdd5cb/rust/proofs/2026-11-17-native-consumer-goals/README.md)
+the old result. The [native durable profile (private source)](https://github.com/noxstellar/spine/blob/74f0ba0598c7737d3142c76130109f76d993ff31/rust/proofs/2026-11-17-native-consumer-goals/README.md)
 now preserves this behavior across work periods and supervisor restarts.
 Earlier `consumer_v1` and `consumer_v2` checkpoints retain their original executable/profile;
 changing the interface does not authorize resetting their accounting.
@@ -598,7 +608,7 @@ live/uncertain work, legacy receipts and inode-changing imports reject. Reports
 and journals retain their fixed bounds. Supersession retains obligations,
 effects and spending as unfinished history, settles any previously uncommitted
 consumption once, and charges a new root normally. The native-only consumer
-profile now passes [integrated restart and recovery controls (private source)](https://github.com/noxstellar/spine/blob/9bd0d24fe5da6b33941575825b0238359afdd5cb/rust/proofs/2026-11-17-native-consumer-goals/README.md).
+profile now passes [integrated restart and recovery controls (private source)](https://github.com/noxstellar/spine/blob/74f0ba0598c7737d3142c76130109f76d993ff31/rust/proofs/2026-11-17-native-consumer-goals/README.md).
 
 ## ACP, MCP, sessions and memory
 
