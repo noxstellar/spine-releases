@@ -126,6 +126,6 @@ detect arbitrary secrets embedded in prose or source**. Treat detailed traces
 like task data. The recorder never reads raw provider bodies, headers or private
 reasoning. No tracing mode exposes these files as model tools.
 
-See [the local verification record (private source)](https://github.com/noxstellar/spine/blob/20b4fc38c71ef78ad087e34c37c86d0545dbada8/rust/proofs/2026-11-16-execution-tracing/README.md)
+See [the local verification record (private source)](https://github.com/noxstellar/spine/blob/9bd0d24fe5da6b33941575825b0238359afdd5cb/rust/proofs/2026-11-16-execution-tracing/README.md)
 for checks and scope. These diagnostics help investigate behavior; they do not
 by themselves establish improved model quality or peer parity.

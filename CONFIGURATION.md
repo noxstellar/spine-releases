@@ -329,13 +329,13 @@ policies; historical staged policies and the native public-record envelope are
 not supported. When public work records are enabled, use their `assistant_text`
 transport. Native Chat Completions, structured decisions and Responses retain
 their existing provider requirements. This first consumer mode does not add an
-independent root reviewer. The [adaptive default (private source)](https://github.com/noxstellar/spine/blob/20b4fc38c71ef78ad087e34c37c86d0545dbada8/rust/VERIFICATION_DESIGN.md) still
+independent root reviewer. The [adaptive default (private source)](https://github.com/noxstellar/spine/blob/9bd0d24fe5da6b33941575825b0238359afdd5cb/rust/VERIFICATION_DESIGN.md) still
 requires efficacy, overhead and durable-state qualification.
 
 The development SDK separately exposes `RootReviewConfig` and `step_reviewed`
 with an explicit trusted evidence policy. Its configured output ceiling is
 1–2,048 tokens. It preserves review attempts and typed final audit records; see
-the [SDK controls and limits (private source)](https://github.com/noxstellar/spine/blob/20b4fc38c71ef78ad087e34c37c86d0545dbada8/rust/proofs/2026-11-17-independent-root-review/README.md).
+the [SDK controls and limits (private source)](https://github.com/noxstellar/spine/blob/9bd0d24fe5da6b33941575825b0238359afdd5cb/rust/proofs/2026-11-17-independent-root-review/README.md).
 This low-level SDK interface is distinct from the native adaptive goal mode below.
 `auto` remains an unaccepted value for `SPINE_RETURN_VERIFICATION`; it is not a
 shortcut for adaptive review.
@@ -344,7 +344,7 @@ The current development profile is `consumer_v3`. It retains the bounded questio
 (at most 8,192 UTF-8 bytes) introduced in `consumer_v2`. The runtime exposes a typed suspension and saves the unresolved child;
 repeated suspended steps consume no model, context or tool calls and no active
 execution time. An accepted answer is trusted steering, not permission to accept
-the old result. The [native durable profile (private source)](https://github.com/noxstellar/spine/blob/20b4fc38c71ef78ad087e34c37c86d0545dbada8/rust/proofs/2026-11-17-native-consumer-goals/README.md)
+the old result. The [native durable profile (private source)](https://github.com/noxstellar/spine/blob/9bd0d24fe5da6b33941575825b0238359afdd5cb/rust/proofs/2026-11-17-native-consumer-goals/README.md)
 now preserves this behavior across work periods and supervisor restarts.
 Earlier `consumer_v1` and `consumer_v2` checkpoints retain their original executable/profile;
 changing the interface does not authorize resetting their accounting.
@@ -424,6 +424,14 @@ to primary); whole-goal review uses primary. The configured review output ceilin
 is further limited by that role model’s cap. Local validation rereads the same
 admitted full artifact snapshots and reports its costs separately; it grants no
 extra model or tool allowance.
+
+New adaptive goals advertise the root evidence contract: `output.evidence` must
+contain distinct exact workspace-relative file paths. Include the supporting
+sources and deliverables; place prose and hashes in `summary`. After final tool
+activity, inspect every declared file with `workspace.inspect_artifact`, preferably
+in one inspection-only batch. The host reports malformed references separately
+from missing or stale receipts. Metadata-only reference checks grant no content
+read, inspection receipt or extra allowance. See the [example](GOALS.md#adaptive-verification-03-development).
 
 The retained policy binds the actual sender’s API, endpoint, model, effort,
 role settings and caps. Changing them cannot silently reuse old review history or
@@ -590,7 +598,7 @@ live/uncertain work, legacy receipts and inode-changing imports reject. Reports
 and journals retain their fixed bounds. Supersession retains obligations,
 effects and spending as unfinished history, settles any previously uncommitted
 consumption once, and charges a new root normally. The native-only consumer
-profile now passes [integrated restart and recovery controls (private source)](https://github.com/noxstellar/spine/blob/20b4fc38c71ef78ad087e34c37c86d0545dbada8/rust/proofs/2026-11-17-native-consumer-goals/README.md).
+profile now passes [integrated restart and recovery controls (private source)](https://github.com/noxstellar/spine/blob/9bd0d24fe5da6b33941575825b0238359afdd5cb/rust/proofs/2026-11-17-native-consumer-goals/README.md).
 
 ## ACP, MCP, sessions and memory
 

@@ -48,6 +48,13 @@ calls, 13,970 input / 5,952 output tokens and 64.567 seconds summed request time
 This is unreleased factual-review evidence; actual repairs and whole-task
 reliability gains still need measurement. Verification remains opt-in.
 
+A subsequent live adaptive task produced correct artifacts but exhausted its
+12-request cap before reviewed completion. It exposed an evidence-format/feedback
+defect; the corrected source passes 1,069 default / 1,605 all-feature test
+invocations and the scripted CLI lifecycle control. The original failure remains
+recorded. These checks do not establish whole-task reliability gains or justify
+a default change; see [the current goal workflow](GOALS.md#adaptive-verification-03-development).
+
 ## Why use Spine?
 
 **Choose Spine when you want a recursive agent inside your own application or

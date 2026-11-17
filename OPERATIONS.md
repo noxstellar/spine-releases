@@ -6,8 +6,8 @@ Spine **0.2.1** is the current public release. Start with the
 [installer and provider setup](README.md) and [ACP integration guide](ACP.md).
 This advanced reference also describes optional and historical execution profiles;
 their availability does not imply new task-competence qualification. Current
-results and limits are recorded in [STATUS.md (private source)](https://github.com/noxstellar/spine/blob/20b4fc38c71ef78ad087e34c37c86d0545dbada8/rust/STATUS.md) and the
-[version history (private source)](https://github.com/noxstellar/spine/blob/20b4fc38c71ef78ad087e34c37c86d0545dbada8/CHANGELOG.md).
+results and limits are recorded in [STATUS.md (private source)](https://github.com/noxstellar/spine/blob/9bd0d24fe5da6b33941575825b0238359afdd5cb/rust/STATUS.md) and the
+[version history (private source)](https://github.com/noxstellar/spine/blob/9bd0d24fe5da6b33941575825b0238359afdd5cb/CHANGELOG.md).
 
 ## Install and run
 
@@ -25,7 +25,7 @@ memory. The direct core executable reads environment settings; the installed
 launcher additionally loads the private setup profile.
 
 Native tools need Docker and the pinned Rust/Python worker, prepared by setup.
-See [worker setup (private source)](https://github.com/noxstellar/spine/blob/20b4fc38c71ef78ad087e34c37c86d0545dbada8/rust/containers/README.md). Actual native isolation controls cover
+See [worker setup (private source)](https://github.com/noxstellar/spine/blob/9bd0d24fe5da6b33941575825b0238359afdd5cb/rust/containers/README.md). Actual native isolation controls cover
 macOS ARM with Colima and Linux ARM workers; passing CI on Linux does not publish
 a Linux package or qualify every Docker environment. External MCP/client tools
 have their own execution boundary. The following examples use the advanced
@@ -384,7 +384,8 @@ the host does not detect arbitrary secrets embedded in source or task text.
 For unreleased [native adaptive goals](GOALS.md#adaptive-verification-03-development),
 the private report includes `adaptive_review_dispatch` and
 `adaptive_review_validation`. The first binds review claims to owned period work;
-the second aggregates local validation reads, bytes and time. Provider usage stays
+the second aggregates metadata-only reference checks, local content reads, bytes
+and time. Reference checks never issue an inspection receipt. Provider usage stays
 in the common request account. A claim can precede an account refusal without an
 HTTP call; neither a claim nor model support is goal acceptance. Preserve these
 records and the original sender/profile when restarting; do not clear history to
