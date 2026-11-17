@@ -6,8 +6,8 @@ Spine **0.2.1** is the current public release. Start with the
 [installer and provider setup](README.md) and [ACP integration guide](ACP.md).
 This advanced reference also describes optional and historical execution profiles;
 their availability does not imply new task-competence qualification. Current
-results and limits are recorded in [STATUS.md (private source)](https://github.com/noxstellar/spine/blob/98957d414fcb6c6060bcfe3045b5c364d4b39983/rust/STATUS.md) and the
-[version history (private source)](https://github.com/noxstellar/spine/blob/98957d414fcb6c6060bcfe3045b5c364d4b39983/CHANGELOG.md).
+results and limits are recorded in [STATUS.md (private source)](https://github.com/noxstellar/spine/blob/26b1cbc1a8ef188656eafa66c822416d444f90b8/rust/STATUS.md) and the
+[version history (private source)](https://github.com/noxstellar/spine/blob/26b1cbc1a8ef188656eafa66c822416d444f90b8/CHANGELOG.md).
 
 ## Install and run
 
@@ -25,7 +25,7 @@ memory. The direct core executable reads environment settings; the installed
 launcher additionally loads the private setup profile.
 
 Native tools need Docker and the pinned Rust/Python worker, prepared by setup.
-See [worker setup (private source)](https://github.com/noxstellar/spine/blob/98957d414fcb6c6060bcfe3045b5c364d4b39983/rust/containers/README.md). Actual native isolation controls cover
+See [worker setup (private source)](https://github.com/noxstellar/spine/blob/26b1cbc1a8ef188656eafa66c822416d444f90b8/rust/containers/README.md). Actual native isolation controls cover
 macOS ARM with Colima and Linux ARM workers; passing CI on Linux does not publish
 a Linux package or qualify every Docker environment. External MCP/client tools
 have their own execution boundary. The following examples use the advanced

@@ -328,7 +328,7 @@ policies; historical staged policies and the native public-record envelope are
 not supported. When public work records are enabled, use their `assistant_text`
 transport. Native Chat Completions, structured decisions and Responses retain
 their existing provider requirements. This first consumer mode does not add an
-independent root reviewer. The [adaptive default (private source)](https://github.com/noxstellar/spine/blob/98957d414fcb6c6060bcfe3045b5c364d4b39983/rust/VERIFICATION_DESIGN.md) still
+independent root reviewer. The [adaptive default (private source)](https://github.com/noxstellar/spine/blob/26b1cbc1a8ef188656eafa66c822416d444f90b8/rust/VERIFICATION_DESIGN.md) still
 requires efficacy, overhead and durable-state qualification.
 
 The current development profile is `consumer_v3`. It retains the bounded questions
@@ -336,7 +336,7 @@ The current development profile is `consumer_v3`. It retains the bounded questio
 repeated suspended steps consume no model, context or tool calls and no active
 execution time. An accepted answer is trusted steering, not permission to accept
 the old result. This does not yet provide durable-goal question handling for
-consumer mode. See the [scoped continuation checks (private source)](https://github.com/noxstellar/spine/blob/98957d414fcb6c6060bcfe3045b5c364d4b39983/rust/proofs/2026-11-16-consumer-continuation/README.md).
+consumer mode. See the [scoped continuation checks (private source)](https://github.com/noxstellar/spine/blob/26b1cbc1a8ef188656eafa66c822416d444f90b8/rust/proofs/2026-11-16-consumer-continuation/README.md).
 Earlier `consumer_v1` and `consumer_v2` checkpoints retain their original executable/profile;
 changing the interface does not authorize resetting their accounting.
 
@@ -358,6 +358,26 @@ on `Tools`; it owns admission and read-only behavior. `StepRequest` now includes
 `return_inspection_tools` in the prospective 0.3 Rust API; empty catalogs are omitted
 from serialized ordinary requests. Consumer mode remains off by default pending
 adaptive-policy and efficacy/cost qualification.
+
+Owned durable-goal history has a separate typed inspection route. It permits
+bounded `goal_history` reads before child acceptance, preserving captured input
+and report hashes, parent scope, permissions and normal tool charges. A client
+tool with the same name gains no such authority. Consumer durable invocation
+remains gated while recovery and actual restart qualification are completed.
+
+The matched-evaluation launcher has an additional experimental configuration:
+`SPINE_COMMON_READ_INSPECTION` names its private capability descriptor and
+`SPINE_COMMON_READ_INSPECTION_SHA256` pins the descriptor bytes. Both are unset
+by default and must be supplied together. They require consumer mode, native
+tools and the exact configured common-worker bridge. The host validates the
+owned files, bridge/frontend/configuration identities and eight-tool catalog;
+the supervisor separately binds the worker, transport and complete read result.
+This admits the existing `workspace.read` with exactly `{"path":"relative/file"}`
+during pending review, without adding a tool or changing its ordinary result.
+The launcher owns this setup; these settings are not a generic permission to
+trust external MCP read annotations. Actual contained qualification is separate
+from the offline configuration controls. Neither setting enables durable goals
+or changes the default verification policy.
 
 ```sh
 # Unreleased experimental consumer assessment, using your configured provider.
@@ -515,6 +535,14 @@ later prompt can watch the same pending question. An unfinished uncertain work
 period stays fenced for inspection. A live process or an external process
 supervisor is still needed: a configuration flag cannot keep a machine powered
 on or revive a process after the operating system exits it.
+
+Explicit `goal rebase-plan` / `goal rebase` recovery for an already-settled
+unfinished execution is documented in [goals](GOALS.md#explicitly-supersede-a-retained-execution-03-development).
+The generated request binds the source hashes/size, current revision and input
+head. Its `max_state_bytes` allowance is explicit and local to that recovery;
+it changes no default state or lifetime limit. Active/uncertain oversized states
+still reject in this development checkpoint. Supersession retains obligations,
+effects and spending as unfinished history, and charges a new root normally.
 
 ## ACP, MCP, sessions and memory
 

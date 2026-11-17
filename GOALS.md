@@ -3,7 +3,7 @@
 > **Version scope:** This public copy preserves the guide’s release and development labels. Features marked unreleased are not available in an older installed binary. Private-source links require repository access.
 
 This interface is under qualification. Public v0.2.1 does not include it.
-See [the release plan (private source)](https://github.com/noxstellar/spine/blob/98957d414fcb6c6060bcfe3045b5c364d4b39983/rust/NEXT_RELEASE_PLAN.md) for remaining gates and the
+See [the release plan (private source)](https://github.com/noxstellar/spine/blob/26b1cbc1a8ef188656eafa66c822416d444f90b8/rust/NEXT_RELEASE_PLAN.md) for remaining gates and the
 [configuration reference](CONFIGURATION.md) for all defaults and examples.
 
 A goal records its objective and acceptance requirements **before any model
@@ -309,6 +309,41 @@ retry permission. There is no recovery command that simply clears that fence;
 reconciliation requires evidence of what happened. The supervisor reports the
 attention state and awaits resolution instead of marking success.
 
+### Explicitly supersede a retained execution (0.3 development)
+
+An already-settled unfinished recursive execution can be archived explicitly
+when its retained tree needs replacement. Consumer durable activation remains
+gated while oversized post-dispatch recovery and restart checks are completed.
+This command currently rejects active or uncertain periods.
+
+```sh
+# Prepare exact source hashes, size, current input head and read allowance.
+spine goal rebase-plan GOAL_ID > /outside/workspace/rebase.json
+# Review that payload; use the current goal revision.
+spine goal rebase GOAL_ID REVISION /outside/workspace/rebase.json
+spine goal run GOAL_ID
+```
+
+`max_state_bytes` is an explicit one-time read allowance in that request, not a
+new default state limit or a lifetime budget. The objective, acceptance rules,
+accepted input and spent allowance remain unchanged. The old tree, candidate,
+question and observed effects are archived as `superseded_unfinished`; none is
+accepted or automatically replayed. The replacement root consumes ordinary
+remaining task allowance. A repeated identical committed request is idempotent.
+
+The captured `goal_history` schema then additionally offers:
+
+```json
+{"record":"execution_archive","index":0,"view":"obligations","page":0,"max_bytes":4096}
+```
+
+Follow its exact frame/section locators for candidate output or individual
+observations, `next_offset` within a page and `next_page` between archive pages.
+`view=full` retains the complete public projection. Retrieval verifies the
+captured hash roots and uses bounded index/page reads; it does not make old
+checks fresh. These fields are absent from ordinary goals without an archive.
+See the [scoped qualification (private source)](https://github.com/noxstellar/spine/blob/26b1cbc1a8ef188656eafa66c822416d444f90b8/rust/proofs/2026-11-17-execution-supersession/README.md).
+
 After three settled periods with identical declared progress, no tool/child work
 and unchanged input, the host asks what should change. It records `blocked` while
 supervision remains pending; an explicit amendment can continue under the same
@@ -321,7 +356,7 @@ and `spine trace REPORT.trace.jsonl --html review.html`. Each period gets its ow
 trace. Details and coverage limits are in [tracing](TRACING.md). Scripted lifecycle
 controls do not prove week-scale model competence or superiority over other agents.
 
-One [real Kimi goal qualification (private source)](https://github.com/noxstellar/spine/blob/98957d414fcb6c6060bcfe3045b5c364d4b39983/rust/proofs/2026-11-16-kimi-goal-live/README.md)
+One [real Kimi goal qualification (private source)](https://github.com/noxstellar/spine/blob/26b1cbc1a8ef188656eafa66c822416d444f90b8/rust/proofs/2026-11-16-kimi-goal-live/README.md)
 passes three explicitly instructed work periods, a question wait with zero model
 calls, automatic resumption after the answer and independently accepted artifacts.
 It used 10 requests and 57.485 seconds. This small lifecycle observation does not
